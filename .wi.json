@@ -1,0 +1,21 @@
+{
+  "default": {
+  },
+  "defaultBrowser": {
+    "rootFolder": "App",
+    "config": "./etc/wp/webpack.config.www.js",
+    "extend": []
+  },
+  "defaultServer": {
+    "rootFolder": "App",
+    "config": "./etc/wp/webpack.config.api.js",
+    "extend": []
+  },
+  "defaultComponent": {
+    "config": "./etc/wp/webpack.config.comp.js",
+    "vars": {
+      "webpackPatch": {}
+    },
+    "extend": []
+  }
+}
