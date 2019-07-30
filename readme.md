@@ -89,6 +89,13 @@ Then add build profiles basing this package available profiles :
 ```
 
 
+## Available config options :
 
+- targetDir {String}            : relative target build directory
+- production {bool}             : build using production mode
+- extractCss {bool}             : do extract css
+- babelInclude {regexp string}  : optional regexp to force parsing external scripts
+- babelPreset {object}          : option for the babelPreset loader
+- TerserJSPlugin {object}       : option for the TerserJSPlugin
 
 

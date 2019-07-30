@@ -142,13 +142,8 @@ module.exports = [
 						test   : /\.jsx?$/,
 						exclude: isExcluded,
 						use    : [
-							require.resolve('react-hot-loader/webpack')
+							'react-hot-loader/webpack'
 						]
-					},
-					{
-						test   : /\.jsx?$/,
-						use    : [require.resolve("source-map-loader")],
-						enforce: "pre"
 					}
 				] || []),
 				{
@@ -204,13 +199,13 @@ module.exports = [
 								      plugins: function () {
 									      return [
 										      autoprefixer({
-											                   overrideBrowserslist: [
-												                   '>1%',
-												                   'last 4 versions',
-												                   'Firefox ESR',
-												                   'not ie < 9', // React doesn't support IE8
-											                                     // anyway
-											                   ]
+											                   //overrideBrowserslist: [
+												               //    '>1%',
+												               //    'last 4 versions',
+												               //    'Firefox ESR',
+												               //    'not ie < 9', // React doesn't support IE8
+											                   //                  // anyway
+											                   //]
 										                   }),
 									      ];
 								      }
@@ -235,12 +230,12 @@ module.exports = [
 								      plugins: function () {
 									      return [
 										      autoprefixer({
-											                   browsers: [
-												                   '>1%',
-												                   'last 4 versions',
-												                   'Firefox ESR',
-												                   'not ie < 9', // React doesn't support IE8 anyway
-											                   ]
+											                   //overrideBrowserslist: [
+												               //    '>1%',
+												               //    'last 4 versions',
+												               //    'Firefox ESR',
+												               //    'not ie < 9', // React doesn't support IE8 anyway
+											                   //]
 										                   }),
 									      ];
 								      }
