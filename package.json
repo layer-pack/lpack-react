@@ -62,8 +62,6 @@
     "react-hot-loader": "^4.6.3",
     "sass-loader": "^7.1.0",
     "shortid": "^2.2.8",
-    "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0",
     "source-map-loader": "^0.2.4",
     "source-map-support": "^0.5.9",
     "strip-json-comments-loader": "0.0.2",
@@ -78,7 +76,7 @@
     "webpack-dev-middleware": "^3.5.1",
     "webpack-dev-server": "^3.1.14",
     "webpack-hot-middleware": "^2.24.3",
-    "webpack-inherit": "^1.5.0",
+    "webpack-inherit": "^1.6.7",
     "webpack-visualizer-plugin": "^0.1.11"
   }
 }
