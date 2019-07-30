@@ -200,10 +200,10 @@ module.exports = [
 									      return [
 										      autoprefixer({
 											                   //overrideBrowserslist: [
-												               //    '>1%',
-												               //    'last 4 versions',
-												               //    'Firefox ESR',
-												               //    'not ie < 9', // React doesn't support IE8
+											                   //    '>1%',
+											                   //    'last 4 versions',
+											                   //    'Firefox ESR',
+											                   //    'not ie < 9', // React doesn't support IE8
 											                   //                  // anyway
 											                   //]
 										                   }),
@@ -231,10 +231,10 @@ module.exports = [
 									      return [
 										      autoprefixer({
 											                   //overrideBrowserslist: [
-												               //    '>1%',
-												               //    'last 4 versions',
-												               //    'Firefox ESR',
-												               //    'not ie < 9', // React doesn't support IE8 anyway
+											                   //    '>1%',
+											                   //    'last 4 versions',
+											                   //    'Firefox ESR',
+											                   //    'not ie < 9', // React doesn't support IE8 anyway
 											                   //]
 										                   }),
 									      ];

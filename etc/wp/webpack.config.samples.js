@@ -79,7 +79,7 @@ module.exports   = [
 				),
 				new webpack.NamedModulesPlugin(),
 				new HtmlWebpackPlugin({
-					                      template: __dirname + '/../tpl/indexComp.html',
+					                      template: wpiCfg.vars.indexTpl || (__dirname + '/../tpl/indexComp.html'),
 					                      inject  : false
 				                      })
 			
@@ -98,7 +98,7 @@ module.exports   = [
 					]
 				},
 				{
-					test: /\.jsx?$/,
+					test   : /\.jsx?$/,
 					exclude: wpiCfg.vars.babelInclude
 					         ?
 					         (
