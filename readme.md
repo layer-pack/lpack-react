@@ -11,6 +11,16 @@ Then add build profiles basing this package available profiles :
 - defaultServer    : A generic profile to make backend/cli builds 
 - defaultComponent : A generic profile to build stand alone react component
 
+<h2>Included ( among others ) : </h2>
+<ul>
+    <li>react ^16.8.6</li>
+    <li>express with minimal SSR</li>
+    <li>sass</li>
+    <li>es6 + decorators</li>
+    <li>hot reload with dev server, SSR & api proxying</li>
+    <li>react-helmet ( html header manager )</li>
+</ul>
+
 ## Example :
 
 ```

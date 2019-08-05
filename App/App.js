@@ -36,13 +36,13 @@ class App extends React.Component {
 				<title>wi-layer-react-express boilerplate v1.0</title>
 			</Helmet>
 			<h1>wi-layer-react-express boilerplate v1.0</h1>
-			<h2>Included mainly : </h2>
+			<h2>Included ( among others ) : </h2>
 			<ul>
 				<li>react ^16.8.6</li>
 				<li>express with minimal SSR</li>
 				<li>sass</li>
 				<li>es6 + decorators</li>
-				<li>hot reload with dev server & SSR/api proxying</li>
+				<li>hot reload with dev server, SSR & api proxying</li>
 				<li>react-helmet ( html header manager )</li>
 			</ul>
 		</React.Fragment>
