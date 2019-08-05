@@ -24,29 +24,32 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-import React    from 'react';
-import {Helmet} from "react-helmet";
+import React from 'react';
 
-class App extends React.Component {
-	
+export default class index extends React.Component {
 	render() {
+		const { helmet, content, state } = this.props,
+		      htmlAttrs                  = helmet.htmlAttributes.toComponent(),
+		      bodyAttrs                  = helmet.bodyAttributes.toComponent();
 		return <React.Fragment>
-			<Helmet>
-				<meta charSet="utf-8"/>
-				<title>wi-layer-react-express boilerplate v1.0</title>
-			</Helmet>
-			<h1>wi-layer-react-express boilerplate v1.0</h1>
-			<h2>Included mainly : </h2>
-			<ul>
-				<li>react ^16.8.6</li>
-				<li>express with minimal SSR</li>
-				<li>sass</li>
-				<li>es6 + decorators</li>
-				<li>hot reload with dev server & SSR/api proxying</li>
-				<li>react-helmet ( html header manager )</li>
-			</ul>
+			<html {...htmlAttrs}>
+			<head>
+				{helmet.title.toComponent()}
+				{helmet.meta.toComponent()}
+				{helmet.link.toComponent()}
+				{
+					state &&
+					<script dangerouslySetInnerHTML={{ __html: "window.__STATE__  = " + (JSON.stringify(state)) }}/>
+				}
+			</head>
+			<body {...bodyAttrs}>
+			<div id="app" dangerouslySetInnerHTML={{ __html: content }}>
+			</div>
+			
+			<script src="./App.js"></script>
+			<script src="./App.vendors.js"></script>
+			</body>
+			</html>
 		</React.Fragment>
 	}
 }
-
-export default App
