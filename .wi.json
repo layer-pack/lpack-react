@@ -20,6 +20,7 @@
         "clearBefore": "dist/api",
         "run": "wpi :api -w",
         "vars": {
+          "production": false,
           "DefinePluginCfg": {
             "__IS_DEV__": true
           }
@@ -27,8 +28,9 @@
       },
       "www": {
         "clearBefore": "dist/www",
-        "run": "wpi-dev-server :www --hot --host 0.0.0.0",
+        "run": "wpi-dev-server :www --hot",
         "vars": {
+          "production": false,
           "DefinePluginCfg": {
             "__IS_DEV__": true
           }
@@ -46,16 +48,12 @@
         "clearBefore": "dist/www",
         "run": "wpi :www",
         "vars": {
-          "production": true
         }
       },
       "api": {
         "wait": "www",
         "clearBefore": "dist/api",
-        "run": "wpi :api",
-        "vars": {
-          "production": true
-        }
+        "run": "wpi :api"
       },
       "server": {
         "wait": "api",
@@ -73,15 +71,13 @@
       "DefinePluginCfg": {
         "__IS_SERVER__": false
       },
+      "production": true,
       "babelPreset": {
         "targets": {
           "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
         },
         "loose": true
       }
-    },
-    "scripts": {
-      "start": "./etc/cli/start"
     }
   },
   "api": "defaultServer",
@@ -91,24 +87,20 @@
     "vars": {
       "targetDir": "dist/api",
       "externals": true,
+      "production": true,
       "DefinePluginCfg": {
         "__IS_SERVER__": false
       }
-    },
-    "scripts": {
-      "start": "./etc/cli/start"
     }
   },
   "defaultComponent": {
     "rootFolder": "Comp",
     "config": "./etc/wp/webpack.config.comp.js",
     "vars": {
+      "production": true,
       "externals": true,
       "targetDir": "dist",
       "rootAlias": "Comp"
-    },
-    "scripts": {
-      "start": "./etc/cli/start"
     }
   },
   "defaultSamples": {
@@ -123,9 +115,6 @@
         },
         "loose": true
       }
-    },
-    "scripts": {
-      "start": "./etc/cli/start"
     }
   }
 }

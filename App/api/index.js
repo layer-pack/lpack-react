@@ -29,7 +29,9 @@ import config  from "App/config";
 import App     from "App/index.js";
 import express from "express";
 
-export default ( server ) => {
+export const name          = "Rendering;"
+export const priorityLevel = 100000;
+export const service       = ( server ) => {
 	server.get(
 		'/',
 		function ( req, res, next ) {

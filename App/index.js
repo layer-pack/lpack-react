@@ -23,12 +23,12 @@
  *   @author : Nathanael Braun
  *   @contact : n8tz.js@gmail.com
  */
-import Index            from "App/index.html";
 import "core-js";
 import React            from "react";
 import ReactDom         from 'react-dom';
 import {renderToString} from "react-dom/server";
 import {Helmet}         from "react-helmet";
+import Index            from "App/index.html";
 import {hot}            from 'react-hot-loader/root'
 import "regenerator-runtime/runtime";
 

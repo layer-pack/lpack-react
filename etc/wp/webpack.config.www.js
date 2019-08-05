@@ -54,7 +54,7 @@ module.exports = [
 			historyApiFallback: true,
 			hot               : true,
 			inline            : true,
-			//publicPath        : wpInherit.getHeadRoot() + "/dist/",
+			//publicPath        : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
 			
 			host : 'localhost', // Defaults to `localhost`
 			port : 8080, // Defaults to 8080
