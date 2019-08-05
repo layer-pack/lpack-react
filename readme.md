@@ -113,7 +113,8 @@ Then add build profiles basing this package available profiles :
 - production {bool}             : build using production mode
 - extractCss {bool}             : do extract css
 - babelInclude {regexp string}  : optional regexp to force parsing external scripts
-- babelPreset {object}          : option for the babelPreset loader
-- TerserJSPlugin {object}       : option for the TerserJSPlugin
+- babelPreset {object}          : optional options for the babelPreset loader
+- TerserJSPlugin {object}       : optional options for the TerserJSPlugin
+- HtmlWebpackPlugin {object}    : optional options for HtmlWebpackPlugin
 
 

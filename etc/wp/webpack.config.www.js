@@ -29,6 +29,7 @@ const wpInherit               = require('webpack-inherit');
 const fs                      = require("fs");
 const webpack                 = require("webpack");
 const path                    = require("path");
+const HtmlWebpackPlugin       = require('html-webpack-plugin');
 const Visualizer              = require('webpack-visualizer-plugin');
 const autoprefixer            = require('autoprefixer');
 const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
@@ -131,6 +132,11 @@ module.exports = [
 				
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
+					] || []
+				),
+				
+				...(wpiCfg.vars.HtmlWebpackPlugin && [
+						new HtmlWebpackPlugin(wpiCfg.vars.HtmlWebpackPlugin)
 					] || []
 				),
 				
