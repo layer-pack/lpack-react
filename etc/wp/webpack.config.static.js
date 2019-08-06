@@ -24,15 +24,15 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-const wpInherit         = require('webpack-inherit'),
-      fs                = require("fs"),
-      webpack           = require("webpack"),
-      path              = require("path"),
-      HtmlWebpackPlugin = require('html-webpack-plugin'),
-      autoprefixer      = require('autoprefixer'),
-      wpiCfg            = wpInherit.getConfig(),
-      isExcluded        = wpInherit.isFileExcluded();
-const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
+const wpInherit            = require('webpack-inherit'),
+      fs                   = require("fs"),
+      webpack              = require("webpack"),
+      path                 = require("path"),
+      HtmlWebpackPlugin    = require('html-webpack-plugin'),
+      autoprefixer         = require('autoprefixer'),
+      wpiCfg               = wpInherit.getConfig(),
+      isExcluded           = wpInherit.isFileExcluded();
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = [
 	{
@@ -40,12 +40,16 @@ module.exports = [
 		
 		// The jsx App entry point
 		entry    : {
-			[wpiCfg.vars.rootAlias]: wpiCfg.vars.production ? [
-				'webpack/hot/dev-server',
-				wpiCfg.vars.rootAlias // default to 'App'
-			] : wpiCfg.vars.rootAlias
+			[wpiCfg.vars.rootAlias]: [
+				...(wpiCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
+				
+				wpiCfg.vars.entryPoint ?
+				wpiCfg.vars.entryPoint
+				                       :
+				wpiCfg.vars.rootAlias  // default to 'App'
+			]
 		},
-		devServer: !wpiCfg.vars.production && {
+		devServer: wpiCfg.vars.devServer && {
 			//index             : '', //needed to enable root proxying
 			contentBase       : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
 			historyApiFallback: true,
@@ -61,7 +65,7 @@ module.exports = [
 		output: {
 			path      : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
 			filename  : "[name].js",
-			publicPath: "/",
+			//publicPath: "/",
 		},
 		
 		// add sourcemap in a dedicated file (.map)
@@ -76,7 +80,6 @@ module.exports = [
 				".scss",
 				".css",
 			],
-			alias     : {},
 		},
 		
 		// Global build plugin & option
@@ -112,7 +115,7 @@ module.exports = [
 		// the requirable files and what manage theirs parsing
 		module: {
 			rules: [
-				...(wpiCfg.vars.production && [
+				...(wpiCfg.vars.devServer && [
 					{
 						test   : /\.jsx?$/,
 						exclude: isExcluded,
@@ -148,7 +151,7 @@ module.exports = [
 										"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(!wpiCfg.vars.production && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									...(!wpiCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
 								]
 							}
 						},

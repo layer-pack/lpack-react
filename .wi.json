@@ -31,6 +31,7 @@
         "run": "wpi-dev-server :www --hot --host 0.0.0.0",
         "vars": {
           "production": false,
+          "devServer": true,
           "DefinePluginCfg": {
             "__IS_DEV__": true
           }
@@ -105,13 +106,13 @@
     }
   },
   "static": {
-    "rootFolder": "Comp",
+    "rootFolder": "AppStatic",
     "config": "./etc/wp/webpack.config.static.js",
     "vars": {
       "targetDir": "dist/static",
       "rootAlias": "App",
       "HtmlWebpackPlugin": {
-        "template": "samples/index.html"
+        "template": "App/index.html.tpl"
       },
       "babelPreset": {
         "targets": {

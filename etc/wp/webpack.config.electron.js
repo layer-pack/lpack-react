@@ -40,12 +40,16 @@ module.exports = [
 		target   : "electron-renderer",
 		// The jsx App entry point
 		entry    : {
-			[wpiCfg.vars.rootAlias]: !wpiCfg.vars.production && [
-				'webpack/hot/dev-server',
-				wpiCfg.vars.rootAlias + "/index.electron" // default to 'App'
-			] || ([wpiCfg.vars.rootAlias + "/index.electron"])
+			[wpiCfg.vars.rootAlias]: [
+				...(wpiCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
+				
+				wpiCfg.vars.entryPoint ?
+				wpiCfg.vars.entryPoint
+				                       :
+				wpiCfg.vars.rootAlias + "/index.client" // default to 'App'
+			]
 		},
-		devServer: !wpiCfg.vars.production && {
+		devServer: wpiCfg.vars.devServer && {
 			contentBase       : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
 			historyApiFallback: true,
 			hot               : true,
@@ -65,7 +69,7 @@ module.exports = [
 		output      : {
 			path      : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
 			filename  : "[name].js",
-			publicPath: wpiCfg.vars.production && "./" // break dev server
+			publicPath: wpiCfg.vars.devServer && "./" // break dev server
 		},
 		optimization: {
 			//nodeEnv    : 'electron',
@@ -156,7 +160,7 @@ module.exports = [
 		// the requirable files and what manage theirs parsing
 		module: {
 			rules: [
-				...(wpiCfg.vars.production && [
+				...(wpiCfg.vars.devServer && [
 					{
 						test   : /\.jsx?$/,
 						exclude: isExcluded,

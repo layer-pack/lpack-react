@@ -41,8 +41,15 @@ module.exports   = [
 		
 		// The jsx App entry point
 		entry: {
-			[wpiCfg.vars.rootAlias]: wpiCfg.vars.rootAlias // default to 'App'
-		},
+			
+			[wpiCfg.vars.rootAlias]: [
+				...(wpiCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
+				
+				wpiCfg.vars.entryPoint ?
+				wpiCfg.vars.entryPoint
+				                       :
+				wpiCfg.vars.rootAlias + "/index" // default to 'App'
+			]		},
 		
 		// The resulting build
 		output: {
@@ -90,7 +97,7 @@ module.exports   = [
 		// the requirable files and what manage theirs parsing
 		module: {
 			rules: [
-				...(wpiCfg.vars.production && [
+				...(wpiCfg.vars.devServer && [
 					{
 						test   : /\.jsx?$/,
 						exclude: isExcluded,
@@ -126,7 +133,7 @@ module.exports   = [
 										"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(!wpiCfg.vars.production && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									...(!wpiCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
 								]
 							}
 						},
