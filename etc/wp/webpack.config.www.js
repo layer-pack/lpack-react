@@ -115,7 +115,7 @@ module.exports = [
 				".scss",
 				".css",
 			],
-			alias     : {
+			alias     : wpiCfg.vars.devServer && {
 				'react-dom': '@hot-loader/react-dom'
 			},
 		},

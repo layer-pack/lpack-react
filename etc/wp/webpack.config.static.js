@@ -80,7 +80,7 @@ module.exports = [
 				".scss",
 				".css",
 			],
-			alias     : wpiCfg.vars.devServer &&{
+			alias     : wpiCfg.vars.devServer && {
 				'react-dom': '@hot-loader/react-dom'
 			},
 		},
@@ -88,6 +88,7 @@ module.exports = [
 		// Global build plugin & option
 		plugins: (
 			[
+				wpInherit.plugin(),
 				
 				...(wpiCfg.vars.extractCss && [
 					new MiniCssExtractPlugin({
@@ -101,7 +102,7 @@ module.exports = [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
 					] || []
 				),
-				//new webpack.NamedModulesPlugin(),
+				new webpack.NamedModulesPlugin(),
 				
 				...((wpiCfg.vars.indexTpl || wpiCfg.vars.HtmlWebpackPlugin) && [
 						new HtmlWebpackPlugin({
@@ -110,36 +111,9 @@ module.exports = [
 						                      })
 					] || []
 				),
-				wpInherit.plugin(),
 			]
 		),
 		
-		
-		optimization: {
-			minimizer  : wpiCfg.vars.production && [
-				new TerserJSPlugin(wpiCfg.vars.terserOptions || {}),
-				new OptimizeCSSAssetsPlugin({
-					                            //assetNameRegExp          : /\.optimize\.css$/g,
-					                            cssProcessor             : require('cssnano'),
-					                            cssProcessorPluginOptions: {
-						                            preset: ['default', { discardComments: { removeAll: true } }],
-					                            },
-					                            canPrint                 : true
-				                            })] || [],
-			splitChunks: {
-				cacheGroups: {
-					default: false,
-					vendors: {
-						// sync + async chunks
-						chunks  : 'all',
-						filename: wpiCfg.vars.rootAlias + ".vendors.js",
-						test    : ( f ) => {
-							return f.resource && wpInherit.isFileExcluded().test(f.resource)
-						},
-					},
-				}
-			}
-		},
 		
 		// the requirable files and what manage theirs parsing
 		module: {
@@ -180,7 +154,7 @@ module.exports = [
 										"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(wpiCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									...(!wpiCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
 								]
 							}
 						},

@@ -49,7 +49,8 @@ module.exports   = [
 				wpiCfg.vars.entryPoint
 				                       :
 				wpiCfg.vars.rootAlias + "/index" // default to 'App'
-			]		},
+			]
+		},
 		
 		// The resulting build
 		output: {
@@ -71,7 +72,9 @@ module.exports   = [
 				".scss",
 				".css",
 			],
-			alias     : {},
+			alias     : wpiCfg.vars.devServer && {
+				'react-dom': '@hot-loader/react-dom'
+			},
 		},
 		
 		// Global build plugin & option
@@ -97,7 +100,7 @@ module.exports   = [
 		// the requirable files and what manage theirs parsing
 		module: {
 			rules: [
-				...(wpiCfg.vars.devServer && [
+				...(wpiCfg.vars.production && [
 					{
 						test   : /\.jsx?$/,
 						exclude: isExcluded,
@@ -133,7 +136,7 @@ module.exports   = [
 										"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(!wpiCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									...(!wpiCfg.vars.production && [[require.resolve("react-hot-loader/babel"), {}]] || []),
 								]
 							}
 						},
