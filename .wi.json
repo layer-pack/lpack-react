@@ -72,7 +72,7 @@
       "DefinePluginCfg": {
         "__IS_SERVER__": false
       },
-      "production": true,
+//      "production": true,
       "babelPreset": {
         "targets": {
           "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
