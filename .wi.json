@@ -90,7 +90,7 @@
       "externals": true,
       "production": true,
       "DefinePluginCfg": {
-        "__IS_SERVER__": false
+        "__IS_SERVER__": true
       }
     }
   },
@@ -111,6 +111,9 @@
     "vars": {
       "targetDir": "dist/static",
       "rootAlias": "App",
+      "DefinePluginCfg": {
+        "__IS_SERVER__": false
+      },
       "HtmlWebpackPlugin": {
         "template": "<%packagePath%>/src/AppStatic/index.html.tpl"
       },
