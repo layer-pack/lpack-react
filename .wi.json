@@ -112,7 +112,7 @@
       "targetDir": "dist/static",
       "rootAlias": "App",
       "HtmlWebpackPlugin": {
-        "template": "<%packagePath%>/AppStatic/index.html.tpl"
+        "template": "<%packagePath%>/src/AppStatic/index.html.tpl"
       },
       "babelPreset": {
         "targets": {
