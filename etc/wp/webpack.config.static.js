@@ -50,7 +50,7 @@ module.exports = [
 			]
 		},
 		devServer: wpiCfg.vars.devServer && {
-			//index             : '', //needed to enable root proxying
+			index             : '', //needed to enable root proxying
 			contentBase       : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
 			historyApiFallback: true,
 			hot               : true,
