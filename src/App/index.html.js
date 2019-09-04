@@ -29,6 +29,7 @@ export default class index extends React.Component {
 				{helmet.title.toComponent()}
 				{helmet.meta.toComponent()}
 				{helmet.link.toComponent()}
+				{helmet.script.toComponent()}
 				{
 					state &&
 					<script dangerouslySetInnerHTML={{ __html: "window.__STATE__  = " + (JSON.stringify(state)) }}/>
