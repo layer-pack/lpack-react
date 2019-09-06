@@ -115,7 +115,7 @@
         "__IS_SERVER__": false
       },
       "HtmlWebpackPlugin": {
-        "template": "<%packagePath%>/src/AppStatic/index.html.tpl"
+        "template": "<%&packagePath%>/src/AppStatic/index.html.tpl"
       },
       "babelPreset": {
         "targets": {
