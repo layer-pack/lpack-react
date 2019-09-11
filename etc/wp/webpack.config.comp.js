@@ -67,7 +67,10 @@ module.exports   = [
 		resolve: {
 			extensions: [
 				".",
+				".ts",
+				".tsx",
 				".js",
+				".jsx",
 				".json",
 				".scss",
 				".css",
@@ -141,6 +144,38 @@ module.exports   = [
 							}
 						},
 					]
+				},
+				{
+					test   : /\.tsx?$/,
+					exclude: wpiCfg.vars.babelInclude
+					         ?
+					         (
+						         includeRE => ({ test: path => (isExcluded.test(path) && !includeRE.test(path)) })
+					         )(new RegExp(wpiCfg.vars.babelInclude))
+					         :
+					         isExcluded,
+					use    : [{
+						loader : 'babel-loader',
+						options: {
+							cacheDirectory: true, //important for performance
+							presets       : [
+								['@babel/preset-env',
+									{
+										...(wpiCfg.vars.babelPreset || {})
+									}],
+								'@babel/preset-react',
+								"@babel/typescript",
+							],
+							plugins       : [
+								["@babel/plugin-proposal-decorators", { "legacy": true }],
+								['@babel/plugin-proposal-class-properties', {
+									"loose": true
+								}],
+								["@babel/plugin-transform-runtime", {}],
+							
+							]
+						}
+					}],
 				},
 				{
 					test: /\.(scss|css)$/,
