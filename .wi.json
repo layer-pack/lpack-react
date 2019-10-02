@@ -3,6 +3,11 @@
     "rootFolder": "src/App",
     "scripts": {
       "start": "./etc/cli/start"
+    },
+    "templates": {
+      "SSRApp": "./templates/SSRApp",
+      "StaticApp": "./templates/StaticApp",
+      "RSApp": "./templates/RSApp"
     }
   },
   "dev": {

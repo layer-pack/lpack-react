@@ -1,4 +1,4 @@
-/*
+/*!
  *   The MIT License (MIT)
  *   Copyright (c) 2019. Wise Wild Web
  *
@@ -23,28 +23,44 @@
  *   @author : Nathanael Braun
  *   @contact : n8tz.js@gmail.com
  */
-import React  from "react";
-import api    from "./api";
-import config from "./config";
+body, html {
+  margin: 0;
+  padding: 0;
+}
 
-const express = require("express"),
-      server  = express(),
-      http    = require('http').Server(server),
-      argz    = require('minimist')(process.argv.slice(2)),
-      debug   = require('./console').default("server");
+#app {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0;
+  user-select: none;
+}
 
-process.title = config.project.name + '::server';
+.desk {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0;
+  user-select: none;
+  pointer-events: none;
 
-debug.warn("process.env.DEBUG : ", process.env.DEBUG);
+  > * {
+    pointer-events: all;
+  }
+}
 
-server.use(express.json({ limit: '10mb' }));       // to support JSON-encoded bodies
-server.use(express.urlencoded({ extended: true, limit: '10mb' })); // to support URL-encoded bodies
+.AppBar > div {
 
-api(server, http);
+  justify-content: space-between;
 
-var server_instance = http.listen(parseInt(argz.p || argz.port || 8000), function () {
-	debug.info('Running on ', server_instance.address().port)
-});
+  .tools {
 
+    float: right !important;
 
-
+    svg {
+      color: white;
+    }
+  }
+}

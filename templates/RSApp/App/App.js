@@ -23,28 +23,40 @@
  *   @author : Nathanael Braun
  *   @contact : n8tz.js@gmail.com
  */
-import React  from "react";
-import api    from "./api";
-import config from "./config";
 
-const express = require("express"),
-      server  = express(),
-      http    = require('http').Server(server),
-      argz    = require('minimist')(process.argv.slice(2)),
-      debug   = require('./console').default("server");
+import AppBar     from '@material-ui/core/AppBar';
+import Toolbar    from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import "App/ui/styles/index.scss"
+import React      from 'react';
+import {Helmet}   from "react-helmet";
+import RS         from "react-scopes";
 
-process.title = config.project.name + '::server';
-
-debug.warn("process.env.DEBUG : ", process.env.DEBUG);
-
-server.use(express.json({ limit: '10mb' }));       // to support JSON-encoded bodies
-server.use(express.urlencoded({ extended: true, limit: '10mb' })); // to support URL-encoded bodies
-
-api(server, http);
-
-var server_instance = http.listen(parseInt(argz.p || argz.port || 8000), function () {
-	debug.info('Running on ', server_instance.address().port)
-});
-
-
-
+export default RS.connect("appState")(
+	( { appState } ) => {
+		return <div>
+			<Helmet>
+				<meta charSet="UTF-8"/>
+				<meta name="viewport"
+				      content="width=device-width, initial-scale=1.01, maximum-scale=1.0, user-scalable=no, minimal-ui"/>
+				<meta http-equiv="X-UA-Compatible" content="IE=9;IE=10;IE=11;IE=Edge,chrome=1"/>
+				<meta name="apple-mobile-web-app-capable" content="yes"/>
+				<meta name="apple-touch-fullscreen" content="yes"/>
+				<title>{%projectName%}</title>
+				<link rel="stylesheet"
+				      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"/>
+				<link
+					href="https://fonts.googleapis.com/icon?family=Material+Icons"
+					rel="stylesheet"/>
+			</Helmet>
+			<AppBar position="static" className={"AppBar"}>
+				<Toolbar>
+					<Typography cvariant="h6" color="inherit" noWrap>
+						{%projectName%} - {appState.hello}
+					</Typography>
+				</Toolbar>
+			</AppBar>
+		
+		</div>
+	}
+);
