@@ -30,6 +30,7 @@ var webpack           = require("webpack");
 var path              = require("path");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 var autoprefixer = require('autoprefixer');
 
 
@@ -82,6 +83,7 @@ module.exports   = [
 			[
 				wpInherit.plugin(),
 				
+				new HardSourceWebpackPlugin(),
 				...((wpiCfg.vars.indexTpl || wpiCfg.vars.HtmlWebpackPlugin) && [
 						new HtmlWebpackPlugin({
 							                      template: wpiCfg.vars.indexTpl || (wpiCfg.vars.rootAlias + '/index.html.tpl'),

@@ -33,7 +33,7 @@ const ElectronPackager     = require("webpack-electron-packager");
 const HtmlWebpackPlugin    = require('html-webpack-plugin');
 const wpiCfg               = wpInherit.getConfig(),
       isExcluded           = wpInherit.isFileExcluded();
-
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 module.exports = [
 	{
 		mode     : wpiCfg.vars.production ? "production" : "development",
@@ -109,6 +109,7 @@ module.exports = [
 			[
 				wpInherit.plugin(),
 				
+				new HardSourceWebpackPlugin(),
 				...((wpiCfg.vars.indexTpl || wpiCfg.vars.HtmlWebpackPlugin) && [
 						new HtmlWebpackPlugin({
 							                      template: wpiCfg.vars.indexTpl || (wpiCfg.vars.rootAlias + '/index.html.tpl'),
