@@ -122,7 +122,7 @@ module.exports = [
 			[
 				wpInherit.plugin(),
 				
-				new HardSourceWebpackPlugin(),
+				//new HardSourceWebpackPlugin(),
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
 					] || []

@@ -135,7 +135,7 @@ module.exports = [
 				] || []),
 				new webpack.ContextReplacementPlugin(/moment[\/\\](lang|locale)$/, /^\.\/(fr|en|us)$/),
 				
-				new HardSourceWebpackPlugin(),
+				//new HardSourceWebpackPlugin(),
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
 					] || []

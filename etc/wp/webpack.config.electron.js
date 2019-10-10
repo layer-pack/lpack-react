@@ -109,7 +109,7 @@ module.exports = [
 			[
 				wpInherit.plugin(),
 				
-				new HardSourceWebpackPlugin(),
+				//new HardSourceWebpackPlugin(),
 				...((wpiCfg.vars.indexTpl || wpiCfg.vars.HtmlWebpackPlugin) && [
 						new HtmlWebpackPlugin({
 							                      template: wpiCfg.vars.indexTpl || (wpiCfg.vars.rootAlias + '/index.html.tpl'),

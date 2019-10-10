@@ -91,7 +91,7 @@ module.exports = [
 			[
 				wpInherit.plugin(),
 				
-				new HardSourceWebpackPlugin(),
+				//new HardSourceWebpackPlugin(),
 				...(wpiCfg.vars.extractCss && [
 					new MiniCssExtractPlugin({
 						                         // Options similar to the same options in webpackOptions.output
