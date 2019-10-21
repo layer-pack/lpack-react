@@ -30,7 +30,7 @@ const fs                      = require("fs");
 const webpack                 = require("webpack");
 const path                    = require("path");
 const HtmlWebpackPlugin       = require('html-webpack-plugin');
-const Visualizer              = require('webpack-visualizer-plugin');
+const BundleAnalyzerPlugin    = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const autoprefixer            = require('autoprefixer');
 const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
@@ -155,9 +155,12 @@ module.exports = [
 							                         'NODE_ENV': JSON.stringify('production')
 						                         }
 					                         }),
-					new Visualizer({
-						               filename: './' + wpiCfg.vars.rootAlias + '.stats.html'
-					               })
+					new BundleAnalyzerPlugin({
+						                         analyzerMode  : 'static',
+						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         ...wpiCfg.vars.BundleAnalyzerPlugin
+					                         })
+				
 				] || [new webpack.NamedModulesPlugin()])
 			]
 		),

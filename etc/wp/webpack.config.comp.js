@@ -29,6 +29,7 @@ var fs                = require("fs");
 var webpack           = require("webpack");
 var path              = require("path");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 var autoprefixer = require('autoprefixer');
@@ -94,7 +95,21 @@ module.exports   = [
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
 					] || []
-				)
+				),
+				
+				...(wpiCfg.vars.production && [
+					new webpack.DefinePlugin({
+						                         'process.env': {
+							                         'NODE_ENV': JSON.stringify('production')
+						                         }
+					                         }),
+					new BundleAnalyzerPlugin({
+						                         analyzerMode  : 'static',
+						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         ...wpiCfg.vars.BundleAnalyzerPlugin
+					                         })
+				
+				] || [new webpack.NamedModulesPlugin()])
 			]
 		),
 		

@@ -32,6 +32,8 @@ const wpInherit               = require('webpack-inherit'),
       autoprefixer            = require('autoprefixer'),
       wpiCfg                  = wpInherit.getConfig(),
       isExcluded              = wpInherit.isFileExcluded();
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
@@ -106,6 +108,19 @@ module.exports = [
 				),
 				new webpack.NamedModulesPlugin(),
 				
+				...(wpiCfg.vars.production && [
+					new webpack.DefinePlugin({
+						                         'process.env': {
+							                         'NODE_ENV': JSON.stringify('production')
+						                         }
+					                         }),
+					new BundleAnalyzerPlugin({
+						                         analyzerMode  : 'static',
+						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         ...wpiCfg.vars.BundleAnalyzerPlugin
+					                         })
+				
+				] || [new webpack.NamedModulesPlugin()]),
 				...((wpiCfg.vars.indexTpl || wpiCfg.vars.HtmlWebpackPlugin) && [
 						new HtmlWebpackPlugin({
 							                      template: wpiCfg.vars.indexTpl || (wpiCfg.vars.rootAlias + '/index.html.tpl'),

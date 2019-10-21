@@ -23,17 +23,19 @@
  *   @author : Nathanael Braun
  *   @contact : n8tz.js@gmail.com
  */
-const wpInherit            = require('webpack-inherit');
-const fs                   = require("fs");
-const webpack              = require("webpack");
-const path                 = require("path");
-const autoprefixer         = require('autoprefixer');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const ElectronPackager     = require("webpack-electron-packager");
-const HtmlWebpackPlugin    = require('html-webpack-plugin');
-const wpiCfg               = wpInherit.getConfig(),
-      isExcluded           = wpInherit.isFileExcluded();
+const wpInherit               = require('webpack-inherit');
+const fs                      = require("fs");
+const webpack                 = require("webpack");
+const path                    = require("path");
+const autoprefixer            = require('autoprefixer');
+const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
+const ElectronPackager        = require("webpack-electron-packager");
+const HtmlWebpackPlugin       = require('html-webpack-plugin');
+const wpiCfg                  = wpInherit.getConfig(),
+      isExcluded              = wpInherit.isFileExcluded();
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const BundleAnalyzerPlugin    = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 module.exports = [
 	{
 		mode     : wpiCfg.vars.production ? "production" : "development",

@@ -24,13 +24,15 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-var wpInherit = require('webpack-inherit');
-var fs        = require("fs");
-var webpack   = require("webpack");
-var path      = require("path");
+var wpInherit              = require('webpack-inherit');
+var fs                     = require("fs");
+var webpack                = require("webpack");
+var path                   = require("path");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const wpiCfg     = wpInherit.getConfig(),
-      isExcluded = wpInherit.isFileExcluded();
+const wpiCfg                  = wpInherit.getConfig(),
+      isExcluded              = wpInherit.isFileExcluded();
 
 module.exports = [
 	{
@@ -126,7 +128,21 @@ module.exports = [
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
 					] || []
-				)
+				),
+				
+				...(wpiCfg.vars.production && [
+					new webpack.DefinePlugin({
+						                         'process.env': {
+							                         'NODE_ENV': JSON.stringify('production')
+						                         }
+					                         }),
+					new BundleAnalyzerPlugin({
+						                         analyzerMode  : 'static',
+						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         ...wpiCfg.vars.BundleAnalyzerPlugin
+					                         })
+				
+				] || [new webpack.NamedModulesPlugin()])
 			],
 	}
 ]
