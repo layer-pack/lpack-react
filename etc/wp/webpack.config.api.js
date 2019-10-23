@@ -131,11 +131,6 @@ module.exports = [
 				),
 				
 				...(wpiCfg.vars.production && [
-					new webpack.DefinePlugin({
-						                         'process.env': {
-							                         'NODE_ENV': JSON.stringify('production')
-						                         }
-					                         }),
 					new BundleAnalyzerPlugin({
 						                         analyzerMode  : 'static',
 						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
