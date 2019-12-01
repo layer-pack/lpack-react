@@ -24,14 +24,14 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-const wpInherit               = require('webpack-inherit'),
-      fs                      = require("fs"),
-      webpack                 = require("webpack"),
-      path                    = require("path"),
-      HtmlWebpackPlugin       = require('html-webpack-plugin'),
-      autoprefixer            = require('autoprefixer'),
-      wpiCfg                  = wpInherit.getConfig(),
-      isExcluded              = wpInherit.isFileExcluded();
+const wpInherit            = require('webpack-inherit'),
+      fs                   = require("fs"),
+      webpack              = require("webpack"),
+      path                 = require("path"),
+      HtmlWebpackPlugin    = require('html-webpack-plugin'),
+      autoprefixer         = require('autoprefixer'),
+      wpiCfg               = wpInherit.getConfig(),
+      isExcluded           = wpInherit.isFileExcluded();
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
@@ -117,6 +117,7 @@ module.exports = [
 					new BundleAnalyzerPlugin({
 						                         analyzerMode  : 'static',
 						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         openAnalyzer  : false,
 						                         ...wpiCfg.vars.BundleAnalyzerPlugin
 					                         })
 				

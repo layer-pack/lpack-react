@@ -134,6 +134,7 @@ module.exports = [
 					new BundleAnalyzerPlugin({
 						                         analyzerMode  : 'static',
 						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         openAnalyzer  : false,
 						                         ...wpiCfg.vars.BundleAnalyzerPlugin
 					                         })
 				
