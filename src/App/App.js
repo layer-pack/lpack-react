@@ -33,9 +33,9 @@ class App extends React.Component {
 		return <React.Fragment>
 			<Helmet>
 				<meta charSet="utf-8"/>
-				<title>wi-layer-react-express boilerplate v1.0</title>
+				<title>lpack-react boilerplate v1.0</title>
 			</Helmet>
-			<h1>wi-layer-react-express boilerplate v1.0</h1>
+			<h1>lpack-react boilerplate v1.0</h1>
 			<h2>Included ( among others ) : </h2>
 			<ul>
 				<li>react ^16.8.6</li>

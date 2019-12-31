@@ -24,27 +24,27 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-var wpInherit              = require('webpack-inherit');
+var lPack                  = require('layer-pack');
 var fs                     = require("fs");
 var webpack                = require("webpack");
 var path                   = require("path");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const wpiCfg                  = wpInherit.getConfig(),
-      isExcluded              = wpInherit.isFileExcluded();
+const lpackCfg                = lPack.getConfig(),
+      isExcluded              = lPack.isFileExcluded();
 
 module.exports = [
 	{
-		mode   : wpiCfg.vars.production ? "production" : "development",
+		mode   : lpackCfg.vars.production ? "production" : "development",
 		entry  : {
 			App: [
-				wpiCfg.vars.rootAlias + '/index.server'
+				lpackCfg.vars.rootAlias + '/index.server'
 			] // default to 'App'
 		},
 		target : 'async-node',
 		output : {
-			path         : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
+			path         : lPack.getHeadRoot() + "/" + (lpackCfg.vars.targetDir || 'dist'),
 			filename     : "[name].server.js",
 			publicPath   : "/",
 			libraryTarget: "commonjs2"
@@ -69,11 +69,11 @@ module.exports = [
 			rules: [
 				{
 					test   : /\.jsx?$/,
-					exclude: wpiCfg.vars.babelInclude
+					exclude: lpackCfg.vars.babelInclude
 					         ?
 					         (
 						         includeRE => ({ test: path => (isExcluded.test(path) && !includeRE.test(path)) })
-					         )(new RegExp(wpiCfg.vars.babelInclude))
+					         )(new RegExp(lpackCfg.vars.babelInclude))
 					         :
 					         isExcluded,
 					use    : {
@@ -83,7 +83,7 @@ module.exports = [
 							presets       : [
 								['@babel/preset-env',
 									{
-										...(wpiCfg.vars.babelPreset || {})
+										...(lpackCfg.vars.babelPreset || {})
 									}],
 								'@babel/preset-react',
 							],
@@ -122,7 +122,7 @@ module.exports = [
 		},
 		plugins:
 			[
-				wpInherit.plugin(),
+				lPack.plugin(),
 				
 				//new HardSourceWebpackPlugin(),
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
@@ -130,12 +130,12 @@ module.exports = [
 					] || []
 				),
 				
-				...(wpiCfg.vars.production && [
+				...(lpackCfg.vars.production && [
 					new BundleAnalyzerPlugin({
 						                         analyzerMode  : 'static',
-						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         reportFilename: './' + lpackCfg.vars.rootAlias + '.stats.html',
 						                         openAnalyzer  : false,
-						                         ...wpiCfg.vars.BundleAnalyzerPlugin
+						                         ...lpackCfg.vars.BundleAnalyzerPlugin
 					                         })
 				
 				] || [new webpack.NamedModulesPlugin()])

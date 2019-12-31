@@ -5,8 +5,8 @@
   "license": "MIT",
   "main": "./Server.js",
   "scripts": {
-    "build": "wpi :www&&wpi :api",
-    "start-dev": "wi-run :dev start",
+    "build": "lpack :www&&lpack :api",
+    "start-dev": "lpack-run :dev start",
     "start": "node ./dist/api/App.server.js -p 8080",
     "runBrowser": "start http://localhost:8080"
   },
@@ -28,7 +28,7 @@
     "url-loader": "^1.1.2"
   },
   "devDependencies": {
-    "webpack-inherit": "^1.8.0",
-    "wi-layer-react-express": "^1.1.12"
+    "layer-pack": "^1.8.0",
+    "lpack-react": "^1.1.12"
   }
 }

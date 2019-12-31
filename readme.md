@@ -1,10 +1,10 @@
-# wi-layer-react-express
+# lpack-react
 
 A inheritable boilerplate with webpack4, react, sass, hmr, express & SSR support
 
 ## How to use ?
 
-Create a project with https://github.com/n8tz/webpack-inherit,<br/>
+Create a project with https://github.com/n8tz/layer-pack,<br/>
 Then add build profiles basing this package available profiles :
 
 - www    : A generic profile to make browser side builds
@@ -43,7 +43,7 @@ Then add build profiles basing this package available profiles :
       }
     },
     "extend": [
-        "wi-layer-react-express"
+        "lpack-react"
     ]
   },
   "api": {
@@ -57,15 +57,15 @@ Then add build profiles basing this package available profiles :
       }
     },
     "extend": [
-        "wi-layer-react-express"
+        "lpack-react"
     ]
   },
   
   "dev": {
     "rootFolder": "App",
     // this boilerplate include a minimal tasks manager for running server easily (not well tested)
-    // see this package .wi.json for more infos
-    // here the task run by the default start command : wi-run :dev start
+    // see this package .layers.json for more infos
+    // here the task run by the default start command : lpack-run :dev start
     "commands": {
       "server": {
       
@@ -82,7 +82,7 @@ Then add build profiles basing this package available profiles :
         // rm -rf before running cmd
         "clearBefore": "dist/api",        
         
-        "run": "wpi :api -w",
+        "run": "lpack :api -w",
         
         // optionnal var overrides ( so for the api profile ) 
         "vars": {
@@ -95,7 +95,7 @@ Then add build profiles basing this package available profiles :
         // can wait another task 
         // "wait": "api",
         "clearBefore": "dist/www",
-        "run": "wpi-dev-server :www --hot --host 0.0.0.0",
+        "run": "lpack-dev-server :www --hot --host 0.0.0.0",
         "vars": {
           "DefinePluginCfg": {
             "__IS_DEV__": true
@@ -111,10 +111,10 @@ Then add build profiles basing this package available profiles :
 ## Init projects :
 
 ```
-npm i -g webpack-inherit
-wi-init myProject.com wi-layer-react-express:SSRApp
-wi-init myProject.com wi-layer-react-express:StaticApp
-wi-init myProject.com wi-layer-react-express:RSApp
+npm i -g layer-pack
+lpack-init myProject.com lpack-react:SSRApp
+lpack-init myProject.com lpack-react:StaticApp
+lpack-init myProject.com lpack-react:RSApp
 ```
 
 ## Available config options :
@@ -128,3 +128,4 @@ wi-init myProject.com wi-layer-react-express:RSApp
 - HtmlWebpackPlugin {object}    : optional options for HtmlWebpackPlugin
 
 
+[![*](https://www.google-analytics.com/collect?v=1&tid=UA-82058889-1&cid=555&t=event&ec=project&ea=view&dp=%2Fproject%2Flpack-react&dt=readme)](#)

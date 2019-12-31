@@ -5,8 +5,8 @@
   "license": "MIT",
   "main": "./Server.js",
   "scripts": {
-    "build": "wpi :www&&wpi :api",
-    "start-dev": "wi-run :dev start",
+    "build": "lpack :www&&lpack :api",
+    "start-dev": "lpack-run :dev start",
     "start": "node ./dist/api/App.server.js -p 8080",
     "runBrowser": "start http://localhost:8080"
   },
@@ -20,12 +20,12 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scopes": "^1.1.0",
+    "react-scopes": "^1.2.3",
     "shortid": "^2.2.8",
     "superagent": "^3.8.2"
   },
   "devDependencies": {
-    "wi-layer-react-express": "^1.1.14",
-    "webpack-inherit": "^1.8.6"
+    "lpack-react": "^1.0.0",
+    "layer-pack": "^1.0.0"
   }
 }

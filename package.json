@@ -1,13 +1,13 @@
 {
-  "name": "wi-layer-react-express",
-  "version": "1.1.23",
+  "name": "lpack-react",
+  "version": "1.0.0",
   "description": "An inheritable boilerplate with webpack 4, react, sass, hmr, SSR, express, helmet, etc",
   "license": "MIT",
   "author": "Nathan Braun <n8tz.js@gmail.com>",
   "scripts": {
-    "build": "wpi :www&&wpi :api",
-    "start-dev": "wi-run :dev start",
-    "start": "wi-run :prod start",
+    "build": "lpack :www&&lpack :api",
+    "start-dev": "lpack-run :dev start",
+    "start": "lpack-run :prod start",
     "runBrowser": "start http://localhost:8080"
   },
   "dependencies": {
@@ -44,6 +44,7 @@
     "http-proxy": "^1.17.0",
     "is": "^3.3.0",
     "json-loader": "^0.5.7",
+    "layer-pack": "1.0.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "^0.4.5",
     "minimist": "^1.2.0",
@@ -70,6 +71,7 @@
     "source-map-explorer": "^2.0.1",
     "source-map-loader": "^0.2.4",
     "source-map-support": "^0.5.9",
+    "strip-json-comments": "^3.0.1",
     "strip-json-comments-loader": "0.0.2",
     "style-loader": "^0.23.1",
     "superagent": "^3.8.2",
@@ -81,7 +83,6 @@
     "webpack-cli": "^3.0.0",
     "webpack-dev-middleware": "^3.5.1",
     "webpack-dev-server": "^3.1.14",
-    "webpack-hot-middleware": "^2.24.3",
-    "webpack-inherit": "^1.8.0"
+    "webpack-hot-middleware": "^2.24.3"
   }
 }

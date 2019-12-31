@@ -14,7 +14,7 @@
       }
     },
     "extend": [
-      "wi-layer-react-express"
+      "lpack-react"
     ]
   }
 }

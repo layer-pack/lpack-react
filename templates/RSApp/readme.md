@@ -31,6 +31,6 @@ npm run start
 
 ## Code structure
 
-This app inherit [wi-layer-react-express](https://github.com/n8tz/wi-layer-react-express)
+This app inherit [lpack-react](https://github.com/n8tz/lpack-react)
 
-See [webpack-inherit](https://github.com/n8tz/webpack-inherit)
+See [layer-pack](https://github.com/n8tz/layer-pack)

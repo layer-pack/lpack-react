@@ -35,7 +35,7 @@ const program = require('commander'),
       argz    = process.argv.slice(2),
       Profile = require('../utils/Profile');
 
-let profileId = process.env.__WPI_PROFILE__ || "default";
+let profileId = process.env.__LPACK_PROFILE__ || "default";
 
 if ( argz[0] && /^\:.*$/.test(argz[0]) )
 	profileId = argz.shift().replace(/^\:(.*)$/, '$1');

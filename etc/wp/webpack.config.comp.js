@@ -24,7 +24,7 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-var wpInherit              = require('webpack-inherit');
+var lPack              = require('layer-pack');
 var fs                     = require("fs");
 var webpack                = require("webpack");
 var path                   = require("path");
@@ -35,35 +35,35 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 var autoprefixer              = require('autoprefixer');
 
 
-const wpiCfg     = wpInherit.getConfig(),
-      isExcluded = wpInherit.isFileExcluded();
+const lpackCfg     = lPack.getConfig(),
+      isExcluded = lPack.isFileExcluded();
 module.exports   = [
 	{
-		mode: wpiCfg.vars.production ? "production" : "development",
+		mode: lpackCfg.vars.production ? "production" : "development",
 		
 		// The jsx App entry point
 		entry: {
 			
-			[wpiCfg.vars.rootAlias]: [
-				...(wpiCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
+			[lpackCfg.vars.rootAlias]: [
+				...(lpackCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
 				
-				wpiCfg.vars.entryPoint ?
-				wpiCfg.vars.entryPoint
+				lpackCfg.vars.entryPoint ?
+				lpackCfg.vars.entryPoint
 				                       :
-				wpiCfg.vars.rootAlias + "/index" // default to 'App'
+				lpackCfg.vars.rootAlias + "/index" // default to 'App'
 			]
 		},
 		
 		// The resulting build
 		output: {
-			path           : wpInherit.getHeadRoot() + "/" + (wpiCfg.vars.targetDir || 'dist'),
+			path           : lPack.getHeadRoot() + "/" + (lpackCfg.vars.targetDir || 'dist'),
 			filename       : "[name].js",
 			publicPath     : "/",
 			"libraryTarget": "commonjs-module"
 		},
 		
 		// add sourcemap in a dedicated file (.map)
-		devtool: !wpiCfg.vars.production && 'source-map',
+		devtool: !lpackCfg.vars.production && 'source-map',
 		
 		// required files resolving options
 		resolve: {
@@ -74,7 +74,7 @@ module.exports   = [
 				".scss",
 				".css",
 			],
-			alias     : wpiCfg.vars.devServer && {
+			alias     : lpackCfg.vars.devServer && {
 				'react-dom': '@hot-loader/react-dom'
 			},
 		},
@@ -82,13 +82,13 @@ module.exports   = [
 		// Global build plugin & option
 		plugins: (
 			[
-				wpInherit.plugin(),
+				lPack.plugin(),
 				
 				//new HardSourceWebpackPlugin(),
-				...((wpiCfg.vars.indexTpl || wpiCfg.vars.HtmlWebpackPlugin) && [
+				...((lpackCfg.vars.indexTpl || lpackCfg.vars.HtmlWebpackPlugin) && [
 						new HtmlWebpackPlugin({
-							                      template: wpiCfg.vars.indexTpl || (wpiCfg.vars.rootAlias + '/index.html.tpl'),
-							                      ...wpiCfg.vars.HtmlWebpackPlugin
+							                      template: lpackCfg.vars.indexTpl || (lpackCfg.vars.rootAlias + '/index.html.tpl'),
+							                      ...lpackCfg.vars.HtmlWebpackPlugin
 						                      })
 					] || []
 				),
@@ -97,7 +97,7 @@ module.exports   = [
 					] || []
 				),
 				
-				...(wpiCfg.vars.production && [
+				...(lpackCfg.vars.production && [
 					new webpack.DefinePlugin({
 						                         'process.env': {
 							                         'NODE_ENV': JSON.stringify('production')
@@ -105,9 +105,9 @@ module.exports   = [
 					                         }),
 					new BundleAnalyzerPlugin({
 						                         analyzerMode  : 'static',
-						                         reportFilename: './' + wpiCfg.vars.rootAlias + '.stats.html',
+						                         reportFilename: './' + lpackCfg.vars.rootAlias + '.stats.html',
 						                         openAnalyzer  : false,
-						                         ...wpiCfg.vars.BundleAnalyzerPlugin
+						                         ...lpackCfg.vars.BundleAnalyzerPlugin
 					                         })
 				
 				] || [new webpack.NamedModulesPlugin()])
@@ -118,7 +118,7 @@ module.exports   = [
 		// the requirable files and what manage theirs parsing
 		module: {
 			rules: [
-				...(wpiCfg.vars.devServer && [
+				...(lpackCfg.vars.devServer && [
 					{
 						test   : /\.jsx?$/,
 						exclude: isExcluded,
@@ -129,11 +129,11 @@ module.exports   = [
 				] || []),
 				{
 					test   : /\.jsx?$/,
-					exclude: wpiCfg.vars.babelInclude
+					exclude: lpackCfg.vars.babelInclude
 					         ?
 					         (
 						         includeRE => ({ test: path => (isExcluded.test(path) && !includeRE.test(path)) })
-					         )(new RegExp(wpiCfg.vars.babelInclude))
+					         )(new RegExp(lpackCfg.vars.babelInclude))
 					         :
 					         isExcluded,
 					use    : [
@@ -144,7 +144,7 @@ module.exports   = [
 								presets       : [
 									['@babel/preset-env',
 										{
-											...(wpiCfg.vars.babelPreset || {})
+											...(lpackCfg.vars.babelPreset || {})
 										}],
 									'@babel/preset-react'
 								],
@@ -154,7 +154,7 @@ module.exports   = [
 										"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(wpiCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									...(lpackCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
 								]
 							}
 						},
@@ -162,7 +162,7 @@ module.exports   = [
 				},
 				{
 					test: /\.(scss|css)$/,
-					use : wpiCfg.vars.extractCss ?
+					use : lpackCfg.vars.extractCss ?
 					      [
 						      {
 							      loader : MiniCssExtractPlugin.loader,
@@ -170,7 +170,7 @@ module.exports   = [
 								      // you can specify a publicPath here
 								      // by default it uses publicPath in webpackOptions.output
 								      publicPath: '../',
-								      hmr       : !wpiCfg.vars.production,
+								      hmr       : !lpackCfg.vars.production,
 							      },
 						      },
 						      { loader: 'css-loader', options: { importLoaders: 1 } },
@@ -196,7 +196,7 @@ module.exports   = [
 							      loader : "sass-loader",
 							      options: {
 								      minimize  : true,
-								      importer  : wpInherit.plugin().sassImporter(),
+								      importer  : lPack.plugin().sassImporter(),
 								      sourceMaps: true,
 							      }
 						      }
@@ -225,7 +225,7 @@ module.exports   = [
 						      {
 							      loader : "sass-loader",
 							      options: {
-								      importer  : wpInherit.plugin().sassImporter(),
+								      importer  : lPack.plugin().sassImporter(),
 								      sourceMaps: true
 							      }
 						      }

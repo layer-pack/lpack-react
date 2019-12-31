@@ -5,6 +5,7 @@
       "start": "./etc/cli/start"
     },
     "templates": {
+      "default": "./templates/SSRApp",
       "SSRApp": "./templates/SSRApp",
       "StaticApp": "./templates/StaticApp",
       "RSApp": "./templates/RSApp"
@@ -23,7 +24,7 @@
       },
       "api": {
         "clearBefore": "dist/api",
-        "run": "wpi :api -w",
+        "run": "lpack :api -w",
         "vars": {
           "production": false,
           "DefinePluginCfg": {
@@ -33,7 +34,7 @@
       },
       "www": {
         "clearBefore": "dist/www",
-        "run": "wpi-dev-server :www --hot --host 0.0.0.0",
+        "run": "lpack-dev-server :www --hot --host 0.0.0.0",
         "vars": {
           "devServer": true,
           "production": false,
@@ -52,14 +53,14 @@
     "commands": {
       "www": {
         "clearBefore": "dist/www",
-        "run": "wpi :www",
+        "run": "lpack :www",
         "vars": {
         }
       },
       "api": {
         "wait": "www",
         "clearBefore": "dist/api",
-        "run": "wpi :api"
+        "run": "lpack :api"
       },
       "server": {
         "wait": "api",

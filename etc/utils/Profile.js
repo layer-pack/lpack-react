@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const wpi      = require('webpack-inherit'),
+const lpack      = require('layer-pack'),
       fs       = require('fs'),
       fkill    = require('fkill'),
       waitOn   = require('wait-on'),
@@ -31,7 +31,7 @@ function getConfigKey( config, key ) {
 };
 
 module.exports = function Profile( profileId ) {
-	let config        = wpi.getConfig(profileId),
+	let config        = lpack.getConfig(profileId),
 	    commands      = getConfigKey(config, "commands"),
 	    logs          = {},
 	    watchers      = {},
@@ -171,8 +171,8 @@ module.exports = function Profile( profileId ) {
 					stdio: 'inherit',
 					env  : {
 						...process.env,
-						'__WPI_PROFILE__': undefined,
-						...(task.vars && { '__WPI_VARS_OVERRIDE__': JSON.stringify(task.vars) })
+						'__LPACK_PROFILE__': undefined,
+						...(task.vars && { '__LPACK_VARS_OVERRIDE__': JSON.stringify(task.vars) })
 					}
 				},
 				( err ) => {
