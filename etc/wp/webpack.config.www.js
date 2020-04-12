@@ -25,7 +25,7 @@
  */
 const TerserJSPlugin          = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const lPack               = require('layer-pack');
+const lPack                   = require('layer-pack');
 const fs                      = require("fs");
 const webpack                 = require("webpack");
 const path                    = require("path");
@@ -35,7 +35,7 @@ const autoprefixer            = require('autoprefixer');
 const MiniCssExtractPlugin    = require('mini-css-extract-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
-const lpackCfg     = lPack.getConfig(),
+const lpackCfg   = lPack.getConfig(),
       isExcluded = lPack.isFileExcluded();
 
 module.exports = [
@@ -49,7 +49,7 @@ module.exports = [
 				
 				lpackCfg.vars.entryPoint ?
 				lpackCfg.vars.entryPoint
-				                       :
+				                         :
 				lpackCfg.vars.rootAlias + "/index.client" // default to 'App'
 			]
 		},
@@ -198,16 +198,15 @@ module.exports = [
 									['@babel/preset-env',
 										{
 											...(lpackCfg.vars.babelPreset || {})
-										}],
-									'@babel/preset-react'
-								],
+										}], "@babel/react"],
 								plugins       : [
 									["@babel/plugin-proposal-decorators", { "legacy": true }],
-									['@babel/plugin-proposal-class-properties', {
-										"loose": true
-									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(lpackCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									["@babel/plugin-proposal-optional-chaining", {}],
+									["@babel/proposal-class-properties", { loose: true }],
+									"@babel/proposal-object-rest-spread",
+									"@babel/plugin-syntax-dynamic-import",
+									...(lpackCfg.vars.devServer && [["react-hot-loader/babel", {}]] || []),
 								]
 							}
 						},
@@ -254,7 +253,7 @@ module.exports = [
 							      }
 						      }
 					      ]
-					                             :
+					                               :
 					      [
 						      "style-loader",
 						      { loader: 'css-loader', options: { importLoaders: 1 } },

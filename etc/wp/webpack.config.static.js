@@ -163,16 +163,15 @@ module.exports = [
 									['@babel/preset-env',
 										{
 											...(lpackCfg.vars.babelPreset || {})
-										}],
-									'@babel/preset-react'
-								],
+										}], "@babel/react"],
 								plugins       : [
 									["@babel/plugin-proposal-decorators", { "legacy": true }],
-									['@babel/plugin-proposal-class-properties', {
-										"loose": true
-									}],
 									["@babel/plugin-transform-runtime", {}],
-									...(lpackCfg.vars.devServer && [[require.resolve("react-hot-loader/babel"), {}]] || []),
+									["@babel/plugin-proposal-optional-chaining", {}],
+									["@babel/proposal-class-properties", { loose: true }],
+									"@babel/proposal-object-rest-spread",
+									"@babel/plugin-syntax-dynamic-import",
+									...(lpackCfg.vars.devServer && [["react-hot-loader/babel", {}]] || []),
 								]
 							}
 						},
