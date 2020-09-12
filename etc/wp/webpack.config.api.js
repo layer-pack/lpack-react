@@ -24,120 +24,119 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-var lPack                  = require('layer-pack');
-var fs                     = require("fs");
-var webpack                = require("webpack");
-var path                   = require("path");
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const lPack                = require('layer-pack'),
+      fs                   = require("fs"),
+      webpack              = require("webpack"),
+      path                 = require("path"),
+      BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const lpackCfg                = lPack.getConfig(),
-      isExcluded              = lPack.isFileExcluded();
+const lpackCfg   = lPack.getConfig(),
+      isExcluded = lPack.isFileExcluded();
 
 module.exports = [
-	{
-		mode   : lpackCfg.vars.production ? "production" : "development",
-		entry  : {
-			App: [
-				lpackCfg.vars.rootAlias + '/index.server'
-			] // default to 'App'
-		},
-		target : 'async-node',
-		output : {
-			path         : lPack.getHeadRoot() + "/" + (lpackCfg.vars.targetDir || 'dist'),
-			filename     : "[name].server.js",
-			publicPath   : "/",
-			libraryTarget: "commonjs2"
-		},
-		devtool: 'source-map',
-		
-		resolve: {
-			symlinks  : false,
-			extensions: [
-				".",
-				".api.js",
-				".api.jsx",
-				".js",
-				".jsx",
-				".json",
-				".scss",
-				".css",
-			],
-		},
-		
-		module : {
-			rules: [
-				{
-					test   : /\.jsx?$/,
-					exclude: lpackCfg.vars.babelInclude
-					         ?
-					         (
-						         includeRE => ({ test: path => (isExcluded.test(path) && !includeRE.test(path)) })
-					         )(new RegExp(lpackCfg.vars.babelInclude))
-					         :
-					         isExcluded,
-					use    : {
-						loader : 'babel-loader',
-						options: {
-							cacheDirectory: true, //important for performance
-							presets       : [
-								['@babel/preset-env',
-									{
-										...(lpackCfg.vars.babelPreset || {})
-									}], "@babel/react"],
-							plugins       : [
-								["@babel/plugin-proposal-decorators", { "legacy": true }],
-								["@babel/plugin-transform-runtime", {}],
-								["@babel/plugin-proposal-optional-chaining", {}],
-								["@babel/proposal-class-properties", { loose: true }],
-								"@babel/proposal-object-rest-spread",
-								"@babel/plugin-syntax-dynamic-import"
-							
-							]
-						}
-					}
-				},
-				{
-					test: /\.(png|jpg|gif|svg|woff2|ttf|eot)(\?.*$|$)$/,
-					use : 'file-loader?limit=8192&name=assets/[hash].[ext]'
-				},
-				{
-					test: /\.woff2?(\?.*$|$)$/,
-					use : "url-loader?prefix=font/&limit=5000&mimetype=application/font-woff&name=assets/[hash].[ext]"
-				},
-				{ test: /\.html$/, use: "file-loader?name=[name].[ext]" },
-				{ test: /\.tpl$/, loader: "dot-tpl-loader?append=true" },
-				{
-					test  : /\.(scss|css|less)(\?.*$|$)$/,
-					loader: 'null-loader'
-				},
-				
-				{ test: /\.otf(\?.*$|$)$/, use: "file-loader?name=assets/[hash].[ext]" },
-				{
-					test  : /\.json?$/,
-					loader: 'strip-json-comments-loader'
-				}
-			],
-		},
-		plugins:
-			[
-				lPack.plugin(),
-				
-				//new HardSourceWebpackPlugin(),
-				...(fs.existsSync("./LICENCE.HEAD.MD") && [
-						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
-					] || []
-				),
-				
-				...(lpackCfg.vars.production && [
-					new BundleAnalyzerPlugin({
-						                         analyzerMode  : 'static',
-						                         reportFilename: './' + lpackCfg.vars.rootAlias + '.stats.html',
-						                         openAnalyzer  : false,
-						                         ...lpackCfg.vars.BundleAnalyzerPlugin
-					                         })
-				
-				] || [new webpack.NamedModulesPlugin()])
-			],
-	}
+    {
+        mode   : lpackCfg.vars.production ? "production" : "development",
+        entry  : {
+            App: [
+                lpackCfg.vars.rootAlias + '/index.server'
+            ] // default to 'App'
+        },
+        target : 'async-node',
+        output : {
+            path         : lPack.getHeadRoot() + "/" + ( lpackCfg.vars.targetDir || 'dist' ),
+            filename     : "[name].server.js",
+            publicPath   : "/",
+            libraryTarget: "commonjs2"
+        },
+        devtool: 'source-map',
+        
+        resolve: {
+            symlinks  : false,
+            extensions: [
+                ".",
+                ".api.js",
+                ".api.jsx",
+                ".js",
+                ".jsx",
+                ".json",
+                ".scss",
+                ".css",
+            ],
+        },
+        
+        module : {
+            rules: [
+                {
+                    test   : /\.jsx?$/,
+                    exclude: lpackCfg.vars.babelInclude
+                             ?
+                             (
+                                 includeRE => ( { test: path => ( isExcluded.test(path) && !includeRE.test(path) ) } )
+                             )(new RegExp(lpackCfg.vars.babelInclude))
+                             :
+                             isExcluded,
+                    use    : {
+                        loader : 'babel-loader',
+                        options: {
+                            cacheDirectory: true, //important for performance
+                            presets       : [
+                                ['@babel/preset-env',
+                                 {
+                                     ...( lpackCfg.vars.babelPreset || {} )
+                                 }], "@babel/react"],
+                            plugins       : [
+                                ["@babel/plugin-proposal-decorators", { "legacy": true }],
+                                ["@babel/plugin-transform-runtime", {}],
+                                ["@babel/plugin-proposal-optional-chaining", {}],
+                                ["@babel/proposal-class-properties", { loose: true }],
+                                "@babel/proposal-object-rest-spread",
+                                "@babel/plugin-syntax-dynamic-import"
+                            
+                            ]
+                        }
+                    }
+                },
+                {
+                    test: /\.(png|jpg|gif|svg|woff2|ttf|eot)(\?.*$|$)$/,
+                    use : 'file-loader?limit=8192&name=assets/[hash].[ext]'
+                },
+                {
+                    test: /\.woff2?(\?.*$|$)$/,
+                    use : "url-loader?prefix=font/&limit=5000&mimetype=application/font-woff&name=assets/[hash].[ext]"
+                },
+                { test: /\.html$/, use: "file-loader?name=[name].[ext]" },
+                { test: /\.tpl$/, loader: "dot-tpl-loader?append=true" },
+                {
+                    test  : /\.(scss|css|less)(\?.*$|$)$/,
+                    loader: 'null-loader'
+                },
+                
+                { test: /\.otf(\?.*$|$)$/, use: "file-loader?name=assets/[hash].[ext]" },
+                {
+                    test  : /\.json?$/,
+                    loader: 'strip-json-comments-loader'
+                }
+            ],
+        },
+        plugins:
+            [
+                lPack.plugin(),
+                
+                //new HardSourceWebpackPlugin(),
+                ...( fs.existsSync("./LICENCE.HEAD.MD") && [
+                        new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
+                    ] || []
+                ),
+                
+                ...( lpackCfg.vars.production && [
+                    new BundleAnalyzerPlugin({
+                                                 analyzerMode  : 'static',
+                                                 reportFilename: './' + lpackCfg.vars.rootAlias + '.stats.html',
+                                                 openAnalyzer  : false,
+                                                 ...lpackCfg.vars.BundleAnalyzerPlugin
+                                             })
+                
+                ] || [new webpack.NamedModulesPlugin()] )
+            ],
+    }
 ]

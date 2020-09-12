@@ -16,15 +16,10 @@
   },
   "www": {
     "rootFolder": "App",
-    "libsPath": "./packages",
     "basedOn": "defaultBrowser",
+    "libsPath": "./packages",
     "vars": {
-      "webpackPatch": {
-        "watchOptions": {
-          "aggregateTimeout": 300,
-          "poll": 1000
-        }
-      }
+      "production": true
     },
     "extend": [
       "lpack-react"

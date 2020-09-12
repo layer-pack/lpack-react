@@ -110,11 +110,11 @@ Then add build profiles basing this package available profiles :
 
 ## Init projects :
 
+
+### Via npm
 ```
 npm i -g layer-pack
-lpack-init myProject.com lpack-react:SSRApp
-lpack-init myProject.com lpack-react:StaticApp
-lpack-init myProject.com lpack-react:RSApp
+lpack-init myProject.com lpack-react
 ```
 
 ## Available config options :

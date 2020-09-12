@@ -6,9 +6,7 @@
     },
     "templates": {
       "default": "./templates/SSRApp",
-      "SSRApp": "./templates/SSRApp",
-      "StaticApp": "./templates/StaticApp",
-      "RSApp": "./templates/RSApp"
+      "SSRApp": "./templates/SSRApp"
     }
   },
   "dev": {

@@ -24,15 +24,18 @@
  *   @contact : n8tz.js@gmail.com
  */
 
-import React from 'react';
+import React                          from 'react';
+import { Pages, Comps, Hooks, Views } from "App/ui";
+
+import "./App.scss"
 
 class App extends React.Component {
-	
-	render() {
-		return <React.Fragment>
-			<h1>{%projectName%}</h1>
-		</React.Fragment>
-	}
+    
+    render() {
+        return <React.Fragment>
+            <Pages.Home/>
+        </React.Fragment>
+    }
 }
 
 export default App

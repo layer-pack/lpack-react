@@ -23,70 +23,58 @@
  *   @author : Nathanael Braun
  *   @contact : n8tz.js@gmail.com
  */
-import Index            from "App/index.html";
-import React            from "react";
-import ReactDom         from 'react-dom';
-import {renderToString} from "react-dom/server";
-import {Helmet}         from "react-helmet";
-import {hot}            from 'react-hot-loader/root'
-import {Provider}       from 'react-redux'
-import configureStore   from './store/configure'
-import initialState     from './store/initialState'
+import Index              from "App/index.html";
+import React              from "react";
+import ReactDom           from 'react-dom';
+import { renderToString } from "react-dom/server";
+import { Helmet }         from "react-helmet";
+import { hot }            from 'react-hot-loader/root'
 
 
 const ctrl = {
-	renderTo( node, initialState = {} ) {
-		const store  = configureStore(initialState),
-		      isDev  = process.env.NODE_ENV !== 'production',
-		      App    = require('App/App.js').default,
-		      HMRApp = isDev ? hot(App) : App;
-		
-		ReactDom.render(
-			<Provider store={store}>
-				<HMRApp/>
-			</Provider>
-			, node);
-		//
-		if ( process.env.NODE_ENV !== 'production' && module.hot ) {
-			module.hot.accept("App/index.html");
-			module.hot.accept(
-				'App/App',
-				m => {
-					let NextApp = hot(require('App/App.js').default);
-					
-					ReactDom.render(
-						<Provider store={store}>
-							<NextApp/>
-						</Provider>
-						, node);
-				}
-			)
-		}
-	},
-	renderSSR( { state, tpl }, cb ) {
-		const store = configureStore(state || initialState);
-		let content = "",
-		    App     = require('App/App.js').default,
-		    preloadedState,
-		    html;
-		
-		try {
-			content        = renderToString(
-				<Provider store={store}>
-					<App/>
-				</Provider>);
-			preloadedState = store.getState();
-			html           = "<!doctype html>\n" +
-				renderToString(<Index
-					helmet={Helmet.renderStatic()}
-					content={content}
-					state={preloadedState}
-				/>);
-		} catch ( e ) {
-			return cb(e)
-		}
-		cb(null, html)
-	}
+    renderTo( node, initialState = {} ) {
+        const isDev  = process.env.NODE_ENV !== 'production',
+              App    = require('App/App.js').default,
+              HMRApp = isDev ? hot(App) : App;
+        
+        ReactDom.render(
+            <HMRApp/>
+            , node);
+        
+        if ( process.env.NODE_ENV !== 'production' && module.hot ) {
+            module.hot.accept("App/index.html");
+            module.hot.accept(
+                'App/App',
+                m => {
+                    let NextApp = hot(require('App/App.js').default);
+                    
+                    ReactDom.render(
+                        <NextApp/>
+                        , node);
+                }
+            )
+        }
+    },
+    renderSSR( { state, tpl }, cb ) {
+        let content = "",
+            App     = require('App/App.js').default,
+            html;
+        
+        try {
+            content = renderToString(
+                <App/>
+            );
+            html    = "<!doctype html>\n" +
+                      renderToString(<Index
+                          helmet={ Helmet.renderStatic() }
+                          content={ content }
+                          state={ {} }
+                      />);
+        } catch ( e ) {
+            return cb(e)
+        }
+        cb(null, html)
+    }
 }
 
 export default ctrl;

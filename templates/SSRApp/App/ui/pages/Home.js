@@ -1,6 +1,6 @@
-/*!
+/*
  *   The MIT License (MIT)
- *   Copyright (c) 2019. Wise Wild Web
+ *   Copyright (c) 2020. Nathanael Braun
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,44 +23,12 @@
  *   @author : Nathanael Braun
  *   @contact : n8tz.js@gmail.com
  */
-body, html {
-  margin: 0;
-  padding: 0;
-}
 
-#app {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0;
-  user-select: none;
-}
 
-.desk {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0;
-  user-select: none;
-  pointer-events: none;
+import React from 'react';
 
-  > * {
-    pointer-events: all;
-  }
-}
-
-.AppBar > div {
-
-  justify-content: space-between;
-
-  .tools {
-
-    float: right !important;
-
-    svg {
-      color: white;
-    }
-  }
+export default () => {
+    return <div className={ "Page_Home" }>
+        <h1>{%projectName%} v0 is Up & Running :)</h1>
+    </div>
 }
