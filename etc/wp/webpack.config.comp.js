@@ -177,18 +177,23 @@ module.exports = [
                               {
                                   loader : 'postcss-loader',
                                   options: {
-                                      plugins: function () {
-                                          return [
-                                              autoprefixer({
-                                                               //overrideBrowserslist: [
-                                                               //    '>1%',
-                                                               //    'last 4 versions',
-                                                               //    'Firefox ESR',
-                                                               //    'not ie < 9', //
-                                                               // React doesn't support
-                                                               // IE8 // anyway ]
-                                                           }),
-                                          ];
+                                      postcssOptions: {
+                                          plugins: function () {
+                                              return [
+                                                  autoprefixer({
+                                                                   overrideBrowserslist: [
+                                                                       '>1%',
+                                                                       'last 4 versions',
+                                                                       'Firefox ESR',
+                                                                       'not ie < 9', // React
+                                                                                     // doesn't
+                                                                                     // support
+                                                                                     // IE8
+                                                                                     // anyway
+                                                                   ]
+                                                               }),
+                                              ];
+                                          }
                                       }
                                   }
                               },
@@ -208,18 +213,24 @@ module.exports = [
                               {
                                   loader : 'postcss-loader',
                                   options: {
-                                      plugins: function () {
-                                          return [
-                                              autoprefixer({
-                                                               //overrideBrowserslist: [
-                                                               //    '>1%',
-                                                               //    'last 4 versions',
-                                                               //    'Firefox ESR',
-                                                               //    'not ie < 9', //
-                                                               // React doesn't support
-                                                               // IE8 anyway ]
-                                                           }),
-                                          ];
+    
+                                      postcssOptions: {
+                                          plugins: function () {
+                                              return [
+                                                  autoprefixer({
+                                                                   overrideBrowserslist: [
+                                                                       '>1%',
+                                                                       'last 4 versions',
+                                                                       'Firefox ESR',
+                                                                       'not ie < 9', // React
+                                                                                     // doesn't
+                                                                                     // support
+                                                                                     // IE8
+                                                                                     // anyway
+                                                                   ]
+                                                               }),
+                                              ];
+                                          }
                                       }
                                   }
                               },

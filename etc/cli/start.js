@@ -49,11 +49,11 @@ let port = program.port === true ? 9090 : program.port,
     pDir = program.source || process.cwd();
 
 let profile = new Profile(profileId);
-
 profile.start();
 profile.onComplete(e => process.exit());
-process.on('SIGINT', e => profile.stop()); // catch ctrl-c
-process.on('SIGTERM', e => profile.stop()); // catch kill
+
+process.on('SIGINT', e => profile.stop().then(e => process.exit())); // catch ctrl-c
+process.on('SIGTERM', e => profile.stop().then(e => process.exit())); // catch kill
 
 if ( port ) {
     server.use(express.json());       // to support JSON-encoded bodies
