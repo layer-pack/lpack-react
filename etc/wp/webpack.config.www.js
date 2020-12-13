@@ -258,9 +258,10 @@ module.exports = [
                               {
                                   loader : "sass-loader",
                                   options: {
-                                      minimize  : true,
-                                      importer  : lPack.plugin().sassImporter(),
-                                      sourceMaps: true,
+                                      sassOptions: {
+                                          importer  : lPack.plugin().sassImporter(),
+                                          sourceMaps: true
+                                      },
                                   }
                               }
                           ]
@@ -294,8 +295,10 @@ module.exports = [
                               {
                                   loader : "sass-loader",
                                   options: {
-                                      importer  : lPack.plugin().sassImporter(),
-                                      sourceMaps: true
+                                      sassOptions: {
+                                          importer  : lPack.plugin().sassImporter(),
+                                          sourceMaps: true
+                                      },
                                   }
                               }
                           ]
