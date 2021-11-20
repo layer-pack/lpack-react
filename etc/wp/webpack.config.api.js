@@ -68,33 +68,29 @@ module.exports = [
             rules: [
                 {
                     test   : /\.jsx?$/,
-                    exclude: lpackCfg.vars.babelInclude
-                             ?
-                             (
-                                 includeRE => ( { test: path => ( isExcluded.test(path) && !includeRE.test(path) ) } )
-                             )(new RegExp(lpackCfg.vars.babelInclude))
-                             :
-                             isExcluded,
-                    use    : {
-                        loader : 'babel-loader',
-                        options: {
-                            cacheDirectory: true, //important for performance
-                            presets       : [
-                                ['@babel/preset-env',
-                                 {
-                                     ...( lpackCfg.vars.babelPreset || {} )
-                                 }], "@babel/react"],
-                            plugins       : [
-                                ["@babel/plugin-proposal-decorators", { "legacy": true }],
-                                ["@babel/plugin-transform-runtime", {}],
-                                ["@babel/plugin-proposal-optional-chaining", {}],
-                                ["@babel/proposal-class-properties", { loose: true }],
-                                "@babel/proposal-object-rest-spread",
-                                "@babel/plugin-syntax-dynamic-import"
-                            
-                            ]
-                        }
-                    }
+                    exclude: isExcluded,
+                    use    : [
+                        {
+                            loader : 'babel-loader',
+                            options: {
+                                cacheDirectory: true, //important for performance
+                                presets       : [
+                                    ['@babel/preset-env',
+                                        {
+                                            ...(lpackCfg.vars.babelPreset || {})
+                                        }],
+                                    '@babel/preset-react'
+                                ],
+                                plugins       : [
+                                    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+                                    ['@babel/plugin-proposal-class-properties', {
+                                        "loose": true
+                                    }],
+                                    ["@babel/plugin-transform-runtime", {}],
+                                ]
+                            }
+                        },
+                    ]
                 },
                 {
                     test: /\.(png|jpg|gif|svg|woff2|ttf|eot)(\?.*$|$)$/,
@@ -105,16 +101,16 @@ module.exports = [
                     use : "url-loader?prefix=font/&limit=5000&mimetype=application/font-woff&name=assets/[hash].[ext]"
                 },
                 { test: /\.html$/, use: "file-loader?name=[name].[ext]" },
-                { test: /\.tpl$/, loader: "dot-tpl-loader?append=true" },
+                { test: /\.tpl$/, use: "dot-tpl-loader?append=true" },
                 {
                     test  : /\.(scss|css|less)(\?.*$|$)$/,
-                    loader: 'null-loader'
+                    use: 'null-loader'
                 },
                 
                 { test: /\.otf(\?.*$|$)$/, use: "file-loader?name=assets/[hash].[ext]" },
                 {
                     test  : /\.json?$/,
-                    loader: 'strip-json-comments-loader'
+                    use: 'strip-json-comments-loader'
                 }
             ],
         },
@@ -136,7 +132,7 @@ module.exports = [
                                                  ...lpackCfg.vars.BundleAnalyzerPlugin
                                              })
                 
-                ] || [new webpack.NamedModulesPlugin()] )
+                ] || [] )
             ],
     }
 ]

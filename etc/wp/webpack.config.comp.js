@@ -64,9 +64,17 @@ module.exports = [
         
         // add sourcemap in a dedicated file (.map)
         devtool: !lpackCfg.vars.production && 'source-map',
-        
+    
+        cache: {
+            type                 : "filesystem",
+            allowCollectingMemory: true,
+            //cacheDirectory       : lPack.getHeadRoot() + "/" + (lpackCfg.vars.targetDir || 'dist') + "/cache",
+        },
+    
         // required files resolving options
         resolve: {
+            cache     : false,// requiered for module cache to create indexes
+            mainFields: ['browser', 'main', 'module'],
             extensions: [
                 ".",
                 ".js",
@@ -110,7 +118,7 @@ module.exports = [
                                                  ...lpackCfg.vars.BundleAnalyzerPlugin
                                              })
                 
-                ] || [new webpack.NamedModulesPlugin()] )
+                ] || [] )
             ]
         ),
         
@@ -118,24 +126,9 @@ module.exports = [
         // the requirable files and what manage theirs parsing
         module: {
             rules: [
-                ...( lpackCfg.vars.devServer && [
-                    {
-                        test   : /\.jsx?$/,
-                        exclude: isExcluded,
-                        use    : [
-                            'react-hot-loader/webpack'
-                        ]
-                    }
-                ] || [] ),
                 {
                     test   : /\.jsx?$/,
-                    exclude: lpackCfg.vars.babelInclude
-                             ?
-                             (
-                                 includeRE => ( { test: path => ( isExcluded.test(path) && !includeRE.test(path) ) } )
-                             )(new RegExp(lpackCfg.vars.babelInclude))
-                             :
-                             isExcluded,
+                    exclude: isExcluded,
                     use    : [
                         {
                             loader : 'babel-loader',
@@ -143,17 +136,17 @@ module.exports = [
                                 cacheDirectory: true, //important for performance
                                 presets       : [
                                     ['@babel/preset-env',
-                                     {
-                                         ...( lpackCfg.vars.babelPreset || {} )
-                                     }], "@babel/react"],
+                                        {
+                                            ...(lpackCfg.vars.babelPreset || {})
+                                        }],
+                                    '@babel/preset-react'
+                                ],
                                 plugins       : [
                                     ["@babel/plugin-proposal-decorators", { "legacy": true }],
+                                    ['@babel/plugin-proposal-class-properties', {
+                                        "loose": true
+                                    }],
                                     ["@babel/plugin-transform-runtime", {}],
-                                    ["@babel/plugin-proposal-optional-chaining", {}],
-                                    ["@babel/proposal-class-properties", { loose: true }],
-                                    "@babel/proposal-object-rest-spread",
-                                    "@babel/plugin-syntax-dynamic-import",
-                                    ...( lpackCfg.vars.devServer && [["react-hot-loader/babel", {}]] || [] ),
                                 ]
                             }
                         },
@@ -161,90 +154,38 @@ module.exports = [
                 },
                 {
                     test: /\.(scss|css)$/,
-                    use : lpackCfg.vars.extractCss ?
-                          [
-                              {
-                                  loader : MiniCssExtractPlugin.loader,
-                                  options: {
-                                      // you can specify a publicPath here
-                                      // by default it uses publicPath in
-                                      // webpackOptions.output
-                                      publicPath: '../',
-                                      hmr       : !lpackCfg.vars.production,
-                                  },
-                              },
-                              { loader: 'css-loader', options: { importLoaders: 1 } },
-                              {
-                                  loader : 'postcss-loader',
-                                  options: {
-                                      postcssOptions: {
-                                          plugins: function () {
-                                              return [
-                                                  autoprefixer({
-                                                                   overrideBrowserslist: [
-                                                                       '>1%',
-                                                                       'last 4 versions',
-                                                                       'Firefox ESR',
-                                                                       'not ie < 9', // React
-                                                                                     // doesn't
-                                                                                     // support
-                                                                                     // IE8
-                                                                                     // anyway
-                                                                   ]
-                                                               }),
-                                              ];
-                                          }
-                                      }
-                                  }
-                              },
-                              {
-                                  loader : "sass-loader",
-                                  options: {
-                                      sassOptions: {
-                                          importer  : lPack.plugin().sassImporter(),
-                                          sourceMaps: true
-                                      },
-                                  }
-                              }
-                          ]
-                                                   :
-                          [
-                              "style-loader",
-                              { loader: 'css-loader', options: { importLoaders: 1 } },
-                              {
-                                  loader : 'postcss-loader',
-                                  options: {
-    
-                                      postcssOptions: {
-                                          plugins: function () {
-                                              return [
-                                                  autoprefixer({
-                                                                   overrideBrowserslist: [
-                                                                       '>1%',
-                                                                       'last 4 versions',
-                                                                       'Firefox ESR',
-                                                                       'not ie < 9', // React
-                                                                                     // doesn't
-                                                                                     // support
-                                                                                     // IE8
-                                                                                     // anyway
-                                                                   ]
-                                                               }),
-                                              ];
-                                          }
-                                      }
-                                  }
-                              },
-                              {
-                                  loader : "sass-loader",
-                                  options: {
-                                      sassOptions: {
-                                          importer  : lPack.plugin().sassImporter(),
-                                          sourceMaps: true
-                                      },
-                                  }
-                              }
-                          ]
+                    use : [
+                        "style-loader",
+                        { loader: 'css-loader', options: { importLoaders: 1 } },
+                        {
+                            loader : 'postcss-loader',
+                            options: {
+                                postcssOptions: {
+                                    plugins: [
+                                        [
+                                            autoprefixer({
+                                                             overrideBrowserslist: [
+                                                                 '>1%',
+                                                                 'last 4 versions',
+                                                                 'Firefox ESR',
+                                                                 'not ie < 9', // React doesn't support IE8 anyway
+                                                             ]
+                                                         }),
+                                        ]]
+                                
+                                }
+                            }
+                        },
+                        {
+                            loader : "sass-loader",
+                            options: {
+                                sassOptions: {
+                                    importer  : lPack.plugin().sassImporter(),
+                                    sourceMaps: true
+                                },
+                            }
+                        }
+                    ]
                 },
                 {
                     test: /\.(png|jpg|gif|svg)(\?.*$|$)$/,
@@ -273,20 +214,15 @@ module.exports = [
                         "file-loader?name=[name].[ext]"
                 }
                 ,
-                {
-                    test: /\.tpl$/, loader:
-                        "dot-tpl-loader?append=true"
-                }
-                ,
-                
+            
                 {
                     test: /\.otf(\?.*$|$)$/, use:
                         "file-loader?name=assets/[hash].[ext]"
                 }
                 ,
                 {
-                    test  : /\.json?$/,
-                    loader:
+                    test: /\.json?$/,
+                    use :
                         'strip-json-comments-loader'
                 }
             ],

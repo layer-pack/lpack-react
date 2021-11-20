@@ -18,7 +18,7 @@ class App extends React.Component {
 	
 	render() {
 		return <React.Fragment>
-			<h1>wp4-react-hmr comp base</h1>
+			<h1>wp5-react-hmr comp base</h1>
 		</React.Fragment>
 	}
 }

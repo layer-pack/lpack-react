@@ -85,6 +85,25 @@
       }
     }
   },
+  "wwwDev": {
+    "rootFolder": "src/App",
+    "config": "./etc/wp/webpack.config.www.js",
+    "vars": {
+      "targetDir": "dist/www",
+      "devServer": true,
+      "DefinePluginCfg": {
+        "__IS_SERVER__": false,
+        "__IS_DEV__": true
+      },
+      "production": false,
+      "babelPreset": {
+        "targets": {
+          "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
+        },
+        "loose": true
+      }
+    }
+  },
   "defaultServer": "api",
   "api": {
     "rootFolder": "src/App",
@@ -99,12 +118,29 @@
     }
   },
   "Comp": "component",
+  "CompDev": "componentDev",
   "component": {
     "rootFolder": "src/Comp",
     "config": "./etc/wp/webpack.config.comp.js",
     "vars": {
       "production": true,
       "externals": true,
+      "DefinePluginCfg": {
+        "__IS_DEV__": false
+      },
+      "targetDir": "dist",
+      "rootAlias": "Comp"
+    }
+  },
+  "componentDev": {
+    "rootFolder": "src/Comp",
+    "config": "./etc/wp/webpack.config.comp.js",
+    "vars": {
+      "production": false,
+      "externals": true,
+      "DefinePluginCfg": {
+        "__IS_DEV__": true
+      },
       "targetDir": "dist",
       "rootAlias": "Comp"
     }
@@ -117,6 +153,29 @@
       "rootAlias": "App",
       "DefinePluginCfg": {
         "__IS_SERVER__": false
+      },
+      "HtmlWebpackPlugin": {
+        "template": "<%&packagePath%>/src/AppStatic/index.html.tpl"
+      },
+      "babelPreset": {
+        "targets": {
+          "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
+        },
+        "loose": true
+      }
+    }
+  },
+  "staticDev": {
+    "rootFolder": "src/AppStatic",
+    "config": "./etc/wp/webpack.config.static.js",
+    "vars": {
+      "production": false,
+      "devServer": true,
+      "targetDir": "dist/static",
+      "rootAlias": "App",
+      "DefinePluginCfg": {
+        "__IS_SERVER__": false,
+        "__IS_DEV__": true
       },
       "HtmlWebpackPlugin": {
         "template": "<%&packagePath%>/src/AppStatic/index.html.tpl"

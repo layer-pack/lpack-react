@@ -38,12 +38,10 @@ class App extends React.Component {
 			<h1>lpack-react boilerplate v1.0</h1>
 			<h2>Included ( among others ) : </h2>
 			<ul>
-				<li>react ^16.8.6</li>
-				<li>express with minimal SSR</li>
+				<li>react ^17</li>
 				<li>sass</li>
 				<li>es6 + decorators</li>
-				<li>hot reload with dev server, SSR & api proxying</li>
-				<li>react-helmet ( html header manager )</li>
+				<li>hot reload with dev server</li>
 			</ul>
 		</React.Fragment>
 	}

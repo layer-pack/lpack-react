@@ -11,8 +11,27 @@
  *  @author : Nathanael Braun
  *  @contact : n8tz.js@gmail.com
  */
-import App      from "./index"
+import React    from "react";
+import ReactDom from "react-dom";
+import {hot}    from "react-hot-loader/root";
 
 
-App.renderTo(document.getElementById('app'), window.__STATE__);
+const isDev  = process.env.NODE_ENV !== 'production',
+      App    = require('App/App.js').default,
+      HMRApp = isDev ? hot(App) : App;
+
+ReactDom.render(
+	<HMRApp/>
+	, document.getElementById('app'));
+
+if ( process.env.NODE_ENV !== 'production' && module.hot ) {
+	module.hot.accept('App/App.js', m => {
+		let NextApp = hot(require('App/App.js').default);
+		
+		ReactDom.render(
+			<NextApp/>
+			, document.getElementById('app'));
+	})
+}
+
 

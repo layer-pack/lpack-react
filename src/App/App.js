@@ -38,7 +38,7 @@ class App extends React.Component {
 			<h1>lpack-react boilerplate v1.0</h1>
 			<h2>Included ( among others ) : </h2>
 			<ul>
-				<li>react ^16.8.6</li>
+				<li>react ^17</li>
 				<li>express with minimal SSR</li>
 				<li>sass</li>
 				<li>es6 + decorators</li>
