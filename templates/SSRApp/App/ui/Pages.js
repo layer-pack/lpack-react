@@ -1,8 +1,9 @@
 /*
+ * Copyright 2021 BRAUN Nathanael
  *
- * Copyright (c) 2020.  Ernst & Young
- * @author : Nathanael.Braun@fr.ey.com
- *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
  */
 
 
