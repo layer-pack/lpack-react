@@ -1,6 +1,6 @@
 {
   "name": "lpack-react",
-  "version": "2.0.3",
+  "version": "2.0.5",
   "description": "An inheritable App, lib or static App boilerplate with wp5, react, sass, hmr, SSR, express, helmet, etc",
   "license": "MIT",
   "author": "Nathan Braun <n8tz.js@gmail.com>",
@@ -18,8 +18,8 @@
     "express": "^4.17.1",
     "is": "^3.3.0",
     "moment": "^2.29.1",
-    "react": "=17.0.1",
-    "react-dom": "=17.0.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
     "react-hot-loader": "^4.13.0",
     "shortid": "^2.2.16"
