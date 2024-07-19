@@ -1,27 +1,35 @@
-
 /*
- * Copyright 2021 BRAUN Nathanael
- *
- * Use of this source code is governed by an MIT-style
- * license that can be found in the LICENSE file or at
- * https://opensource.org/licenses/MIT.
+ * Copyright (c) 2020-2022.
+ *  MIT
  */
 
 const lpack      = require('layer-pack'),
-      fs       = require('fs'),
-      fkill    = require('fkill'),
-      waitOn   = require('wait-on'),
-      rimraf   = require('rimraf'),
-      chokidar = require('chokidar'),
-      exec     = require('child_process').exec;
+      fs         = require('fs'),
+      waitOn     = require('wait-on'),
+      { rimraf } = require('rimraf'),
+      chokidar   = require('chokidar'),
+      path       = require('path'),
+      exec       = require('child_process').exec,
+      spawn      = require('child_process').spawn;
+
+let fkill;
+import('fkill').then(
+	mod => fkill = mod.default
+);
 
 function getConfigKey( config, key ) {
 	for ( let i = 0; i < config.allCfg.length; i++ )
 		if ( config.allCfg[i][key] )
 			return config.allCfg[i][key];
-};
+}
 
-module.exports = function Profile( profileId ) {
+
+/**
+ * This is the draft build profiles managers
+ * @param profileId
+ * @param project
+ */
+module.exports = function Profile( profileId, project ) {
 	let config        = lpack.getConfig(profileId),
 	    commands      = getConfigKey(config, "commands"),
 	    logs          = {},
@@ -34,8 +42,9 @@ module.exports = function Profile( profileId ) {
 	    nbCmd         = 0;
 	
 	return {
+		profileId,
 		raw: config,
-		start() {
+		start( resume ) {
 			if ( !commands )
 				return console.error('No commands in this profile', profileId);
 			
@@ -43,7 +52,7 @@ module.exports = function Profile( profileId ) {
 			for ( let cmdId in commands )
 				if ( commands.hasOwnProperty(cmdId) ) {
 					logs[cmdId] = logs[cmdId] || { stdout: [], stderr: [] };
-					this.run(cmdId)
+					this.run({ cmdId, resume })
 				}
 		},
 		getStatus() {
@@ -75,9 +84,10 @@ module.exports = function Profile( profileId ) {
 			curSessionNum++;
 			runAfter          = {};
 			onComplete.length = 0;
-			return Promise.all(
+			return Promise.allSettled(
 				[
-					...Object.keys(commands).map(id => this.kill(id, true)),
+					...(commands && Object.keys(commands).map(id => this.kill(id, true)) || []),
+					//killPortProcess(1234),
 					fkill(":8080", { tree: true, force: true, silent: true })
 				]
 			).then(e => (killing = {}));
@@ -85,42 +95,107 @@ module.exports = function Profile( profileId ) {
 		kill( cmdId, stopWatching ) {
 			let cmd  = running[cmdId],
 			    task = commands[cmdId];
-			//this.cmdLog(cmdId, 'Killing ' + ':' + profileId + '::' + cmdId);
-			console.warn("Killing " + ':' + profileId + '::' + cmdId);
-			stopWatching && watchers[cmdId] && watchers[cmdId].close();
-			killing[cmdId] = true;
-			return cmd && fkill(cmd.pid, { tree: true, force: true, silent: true })
+			//console.warn("Killing " + ':' + profileId + '::' + cmdId, cmd.process.pid, task.killAfter);
+			
+			if ( cmd && !cmd.killed ) {
+				this.cmdLog(cmdId, 'Killing ' + ':' + profileId + '::' + cmdId);
+				stopWatching && watchers[cmdId] && watchers[cmdId].close();
+				cmd.killed = true;
+			}
+			//if ( cmd )
+			
+			//cmd && cmd.process.kill('SIGINT');
+			//cmd && cmd.process.stdin.write("\x03");
+			
+			return cmd && fkill([cmd.process.pid, ...(task.killAfter || [])], {
+				tree  : true,
+				force : true,
+				silent: true
+				//forceAfterTimeout: 1000
+			})
 				.then(
 					logs => {
 						running[cmdId] = null;
+					},
+					err => {
+						running[cmdId] = null;
 					}
-				)
+				) || new Promise(resolve => resolve())
 		},
-		run( cmdId, cleared, watched, waitDone, sessionNum = curSessionNum ) {
+		run( { cmdId, resume, cleared, watched, waitDone, sessionNum = curSessionNum } ) {
 			let cmd  = running[cmdId],
-			    task = commands[cmdId];
+			    task = commands[cmdId], doResume, lastBuildTm;
 			
 			if ( sessionNum < curSessionNum )// stop previous lost call backs
 				return;
 			
-			if ( cmd ) {
-				return this.kill(cmdId).then(e => this.run(cmdId, cleared, watched, waitDone, sessionNum));
+			if ( cmd || cmd && cmd.killed ) {
+				if ( cmd && !cmd.killed )
+					return this.kill(cmdId).then(e => this.run({
+						                                           cmdId,
+						                                           resume,
+						                                           cleared,
+						                                           watched,
+						                                           waitDone,
+						                                           sessionNum
+					                                           }));
+				else return;
 			}
 			
-			if ( !cleared && task.clearBefore ) {
-				console.warn("Clear before ", task.clearBefore);
-				return rimraf(task.clearBefore, ( err, val ) => this.run(cmdId, true, watched, waitDone, sessionNum));
+			if ( resume && task.skipOnResume ) {
+				console.info("skipOnResume ", cmdId);
+				if ( task.skipIfExist ) {
+					try {
+						fs.statSync(path.join(process.cwd(), task.skipIfExist));
+						doResume = true;
+						console.info("skip because ", task.skipIfExist, "exist");
+					} catch ( e ) {
+						console.info("skip aborted because ", task.skipIfExist, " don't exist");
+						doResume = false;
+					}
+				}
+				else doResume = true;
+				if ( doResume )
+					return setTimeout(
+						tm => {
+							if ( runAfter[cmdId] ) {
+								while ( runAfter[cmdId].length )
+									this.run({
+										         cmdId   : runAfter[cmdId].shift(), resume,
+										         cleared : false,
+										         watched : false,
+										         waitDone: true,
+										         sessionNum
+									         });
+							}
+							
+							nbCmd--;
+							if ( nbCmd === 0 )
+								while ( onComplete.length )
+									onComplete.shift()();
+						}
+					)
 			}
-			
-			nbCmd++;
 			if ( !waitDone && task.wait ) {
 				runAfter[task.wait] = runAfter[task.wait] || [];
 				runAfter[task.wait].push(cmdId);
 				return;
 			}
+			if ( !cleared && task.clearBefore ) {
+				console.warn("Clear before ", task.clearBefore);
+				return rimraf(task.clearBefore).then(( err, val ) => this.run({
+					                                                              cmdId, resume,
+					                                                              cleared: true,
+					                                                              watched,
+					                                                              waitDone,
+					                                                              sessionNum
+				                                                              }));
+			}
+			
+			nbCmd++;
 			if ( !watched && task.watch ) {
 				watchers[cmdId] && watchers[cmdId].close();
-				
+				watchers[cmdId] = undefined;
 				return waitOn({
 					              resources: [
 						              task.watch
@@ -132,9 +207,17 @@ module.exports = function Profile( profileId ) {
 				              err => {
 					              if ( err ) {
 						              console.warn(cmdId + ": '" + task.watch + "' still not here...");
-						              return setTimeout(tm => this.run(cmdId, true, false, true, sessionNum), 3000);
+						              return setTimeout(tm => this.run({
+							                                               cmdId, resume,
+							                                               cleared : true,
+							                                               watched : false,
+							                                               waitDone: true,
+							                                               sessionNum
+						                                               }), 3000);
 					              }
-					
+					              
+					              watchers[cmdId] && watchers[cmdId].close();
+					              
 					              watchers[cmdId] = chokidar
 						              .watch(task.watch, {
 							              ignored           : /(^|[\/\\])\../,
@@ -143,24 +226,43 @@ module.exports = function Profile( profileId ) {
 							              "poll"            : 1000
 						              })
 						              .on('all', ( event, path ) => {
-							              console.warn(cmdId + ": '" + task.watch + "' has been updated restarting...", event);
-							
+							              
 							              if ( event === 'add' || event === 'change' ) {
 								              console.warn(cmdId + ": '" + task.watch + "' has been updated restarting...");
-								
-								              this.run(cmdId, true, true, true, sessionNum);
+								              
+								              if ( running[cmdId] && running[cmdId].killed ) {
+									              console.info(cmdId + ": '" + task.watch + "' ignore on local kill...")
+									              return;
+								              }
+								              this.kill(cmdId).then(
+									              e => this.run({
+										                            cmdId,
+										                            resume,
+										                            cleared : true,
+										                            watched : true,
+										                            waitDone: true,
+										                            sessionNum
+									                            })
+								              );
 							              }
 						              });
 					              console.warn(cmdId + ": '" + task.watch + "' waiting updates...");
 				              }
 				)
 			}
+			
+			
+			if ( running[cmdId] )
+				return console.error(cmdId, 'Skipped overstart ' + ':' + profileId + '::' + cmdId);
+			
 			this.cmdLog(cmdId, 'Starting ' + ':' + profileId + '::' + cmdId);
-			running[cmdId] = cmd = exec(
+			cmd         = running[cmdId] = {};
+			cmd.process = exec(
 				task.run,
 				{
-					stdio: 'inherit',
-					env  : {
+					shell: true,
+					//stdio: 'inherit',
+					env: {
 						...process.env,
 						'__LPACK_PROFILE__': undefined,
 						...(task.vars && { '__LPACK_VARS_OVERRIDE__': JSON.stringify(task.vars) })
@@ -168,15 +270,26 @@ module.exports = function Profile( profileId ) {
 				},
 				( err ) => {
 					//err && console.warn(err);
-					if ( killing[cmdId] ) {
-						killing[cmdId] = false;
+					if ( cmd.killed ) {
+						console.info(cmdId + ": '" + task.run + "' ended normally...")
 						return;
 					}
-					//this.cmdLog(cmdId, cmdId + ": '" + task.run + "' ended ...");
-					err && this.cmdErr(cmdId, cmdId + ": '" + task.run + "' ended with error : " + err);
+					if ( err ) {
+						this.cmdErr(cmdId, cmdId + ": '" + task.run + "' ended with error : " + err);
+					}
+					else
+						this.cmdLog(cmdId, cmdId + ": '" + task.run + "' ended ...");
 					if ( sessionNum === curSessionNum && task.forever ) {
 						console.warn(cmdId + " restart ...");
-						setTimeout(tm => this.run(cmdId, true, true, true, sessionNum), 5000);
+						this.kill(cmdId).then(
+							e => setTimeout(tm => this.run({
+								                               cmdId, resume,
+								                               cleared   : true,
+								                               watched   : true,
+								                               waitDone  : true,
+								                               sessionNum: sessionNum
+							                               }), 5000)
+						);
 					}
 					else {// normal exit
 						if ( sessionNum === curSessionNum ) {
@@ -184,7 +297,13 @@ module.exports = function Profile( profileId ) {
 							
 							if ( runAfter[cmdId] ) {
 								while ( runAfter[cmdId].length )
-									this.run(runAfter[cmdId].shift(), false, false, true, sessionNum);
+									this.run({
+										         cmdId   : runAfter[cmdId].shift(), resume,
+										         cleared : false,
+										         watched : false,
+										         waitDone: true,
+										         sessionNum
+									         });
 							}
 							
 							nbCmd--;
@@ -197,8 +316,8 @@ module.exports = function Profile( profileId ) {
 				}
 			);
 			
-			cmd.stdout.on('data', txt => (this.cmdLog(cmdId, txt.toString())))
-			cmd.stderr.on('data', txt => (this.cmdErr(cmdId, txt.toString())))
+			cmd.process.stdout.on('data', txt => (this.cmdLog(cmdId, txt.toString())))
+			cmd.process.stderr.on('data', txt => (this.cmdErr(cmdId, txt.toString())))
 		}
 	}
 }

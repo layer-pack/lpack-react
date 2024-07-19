@@ -15,11 +15,11 @@ const TerserJSPlugin          = require('terser-webpack-plugin'),
       autoprefixer            = require('autoprefixer'),
       MiniCssExtractPlugin    = require('mini-css-extract-plugin'),
       HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-
-const lpackCfg      = lPack.getConfig(),
-      isExcluded    = lPack.isFileExcluded(),
-      devServerPort = process.env.DEV_SERVER_PORT || 8080,
-      proxyTo       = process.env.API_PORT || 9701;
+const ReactRefreshPlugin      = require('@pmmmwh/react-refresh-webpack-plugin');
+const lpackCfg                = lPack.getConfig(),
+      isExcluded              = lPack.isFileExcluded(),
+      devServerPort           = process.env.DEV_SERVER_PORT || 8080,
+      proxyTo                 = process.env.API_PORT || 9701;
 
 module.exports = [
 	{
@@ -28,7 +28,7 @@ module.exports = [
 		// The jsx App entry point
 		entry: {
 			[lpackCfg.vars.rootAlias]: [
-				...(lpackCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
+				//...(lpackCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
 				
 				lpackCfg.vars.entryPoint ?
 				lpackCfg.vars.entryPoint
@@ -48,9 +48,9 @@ module.exports = [
 			},
 			proxy             : [
 				{
-					context         : ['/**', '!/ws/**', '!/sockjs-node/**'],
+					context: ['/**', '!/ws/**', '!/sockjs-node/**'],
 					//disableHostCheck: true,
-					target          : 'http://127.0.0.1:' + proxyTo,
+					target: 'http://127.0.0.1:' + proxyTo,
 					//ws              : true,
 					secure: false,                         // proxy websockets,
 					
@@ -135,9 +135,9 @@ module.exports = [
 				".scss",
 				".css",
 			],
-			alias     : lpackCfg.vars.devServer && {
-				'react-dom': '@hot-loader/react-dom'
-			},
+			//alias     : lpackCfg.vars.devServer && {
+			//	'react-dom': '@hot-loader/react-dom'
+			//},
 		},
 		
 		// Global build plugin & option
@@ -152,6 +152,9 @@ module.exports = [
 						                         filename: '[name].css',
 						                         //chunkFilename: '[id].css'
 					                         })
+				] || []),
+				...(lpackCfg.vars.devServer && [
+					new ReactRefreshPlugin({})
 				] || []),
 				new webpack.ContextReplacementPlugin(/moment[\/\\](lang|locale)$/, /^\.\/(fr|en|us)$/),
 				
@@ -206,9 +209,10 @@ module.exports = [
 									'@babel/preset-react'
 								],
 								plugins       : [
+									...(lpackCfg.vars.devServer && [['react-refresh/babel', {}]] || {}),
 									["@babel/plugin-proposal-decorators", { "legacy": true }],
-									['@babel/plugin-proposal-class-properties', {
-										"loose": true
+									['@babel/plugin-transform-class-properties', {
+										//"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
 								]

@@ -9,20 +9,10 @@ import React    from "react";
 import ReactDom from "react-dom";
 
 import Comp  from "./index"
-import {hot} from "react-hot-loader/root";
 
-console.log("Dev !")
+//console.log("Dev !")
 
-const isDev   = process.env.NODE_ENV !== 'production',
-      HMRComp = isDev ? hot(Comp) : Comp;
 
 ReactDom.render(
-	<HMRComp/>
+	<Comp/>
 	, document.getElementById('app'));
-
-if ( process.env.NODE_ENV !== 'production' && module.hot ) {
-	module.hot.accept('./index',
-	                  m => ReactDom.render(
-		                  <HMRComp/>
-		                  , document.body));
-}

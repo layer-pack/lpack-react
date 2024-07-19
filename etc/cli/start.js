@@ -29,7 +29,6 @@
 const program = require('commander'),
       express = require("express"),
       server  = express(),
-      fkill   = require('fkill'),
       http    = require('http').Server(server),
       exec    = require('child_process').exec,
       argz    = process.argv.slice(2),

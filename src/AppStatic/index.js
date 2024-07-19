@@ -7,25 +7,13 @@
  */
 import React    from "react";
 import ReactDom from "react-dom";
-import {hot}    from "react-hot-loader/root";
 
 
-const isDev  = process.env.NODE_ENV !== 'production',
-      App    = require('App/App.js').default,
-      HMRApp = isDev ? hot(App) : App;
+const App    = require('App/App.js').default;
 
 ReactDom.render(
-	<HMRApp/>
+	<App/>
 	, document.getElementById('app'));
 
-if ( process.env.NODE_ENV !== 'production' && module.hot ) {
-	module.hot.accept('App/App.js', m => {
-		let NextApp = hot(require('App/App.js').default);
-		
-		ReactDom.render(
-			<NextApp/>
-			, document.getElementById('app'));
-	})
-}
 
 

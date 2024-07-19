@@ -11,14 +11,13 @@
     "runBrowser": "start http://localhost:8080"
   },
   "dependencies": {
-    "express": "^4.16.3",
+    "express": "^4.19.2",
     "is": "^3.3.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "layer-pack": "^1.0.4",
-    "lpack-react": "^1.2.0"
+    "layer-pack": "^2.3.9",
+    "lpack-react": "^2.0.8"
   }
 }

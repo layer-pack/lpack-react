@@ -15,16 +15,16 @@ class App extends React.Component {
 		return <React.Fragment>
 			<Helmet>
 				<meta charSet="utf-8"/>
-				<title>lpack-react boilerplate v1.0</title>
+				<title>lpack-react boilerplate v1.1</title>
 			</Helmet>
-			<h1>lpack-react boilerplate v1.0</h1>
+			<h1>lpack-react boilerplate v1.1</h1>
 			<h2>Included ( among others ) : </h2>
 			<ul>
-				<li>react ^17</li>
+				<li>react ^18</li>
 				<li>express with minimal SSR</li>
 				<li>sass</li>
 				<li>es6 + decorators</li>
-				<li>hot reload with dev server, SSR & api proxying</li>
+				<li>react-refresh, SSR & api proxying</li>
 				<li>react-helmet ( html header manager )</li>
 			</ul>
 		</React.Fragment>

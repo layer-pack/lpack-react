@@ -14,11 +14,11 @@ Then add build profiles basing this package available profiles :
 
 <h2>Included ( among others ) : </h2>
 <ul>
-    <li>react ^17</li>
+    <li>react ^18</li>
     <li>express with minimal SSR</li>
     <li>sass</li>
     <li>es6 + decorators</li>
-    <li>hot reload with dev server, SSR & api proxying</li>
+    <li>react-refresh, SSR & api proxying</li>
     <li>react-helmet ( html header manager )</li>
 </ul>
 

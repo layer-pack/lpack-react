@@ -17,13 +17,20 @@
     "commands": {
       "server": {
         "watch": "dist/api/App.server.js",
-        "run": "node --inspect=[::]:9229 ./dist/api/App.server.js -p 9701",
+        "run": "node ./dist/api/App.server.js -p 9701",
+        "killAfter": [":9701"],
         "forever": true
       },
       "api": {
         "clearBefore": "dist/api",
         "run": "lpack :api -w",
         "vars": {
+          "webpackPatch": {
+            "watchOptions": {
+              "aggregateTimeout": 200,
+              "poll": 1000
+            }
+          },
           "production": false,
           "DefinePluginCfg": {
             "__IS_DEV__": true
@@ -31,8 +38,10 @@
         }
       },
       "www": {
-        "clearBefore": "dist/www",
-        "run": "lpack-dev-server :www --hot --host 0.0.0.0",
+        "clearBefore": "dist/wwwDev",
+        "run": "lpack-dev-server :wwwDev --hot ",
+        "killAfter": [":8080"],
+        "forever": true,
         "vars": {
           "devServer": true,
           "production": false,
@@ -80,8 +89,8 @@
       "babelPreset": {
         "targets": {
           "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
-        },
-        "loose": true
+        }
+        //,        "loose": true
       }
     }
   },
@@ -89,18 +98,24 @@
     "rootFolder": "src/App",
     "config": "./etc/wp/webpack.config.www.js",
     "vars": {
-      "targetDir": "dist/www",
+      "targetDir": "dist/wwwDev",
       "devServer": true,
       "DefinePluginCfg": {
         "__IS_SERVER__": false,
         "__IS_DEV__": true
       },
+      "webpackPatch": {
+        "watchOptions": {
+          "aggregateTimeout": 200,
+          "poll": 1000
+        }
+      },
       "production": false,
       "babelPreset": {
         "targets": {
           "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
-        },
-        "loose": true
+        }
+        // ,"loose": true
       }
     }
   },
@@ -160,8 +175,8 @@
       "babelPreset": {
         "targets": {
           "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
-        },
-        "loose": true
+        }
+        //,        "loose": true
       }
     }
   },
@@ -183,8 +198,8 @@
       "babelPreset": {
         "targets": {
           "browsers": "> 0.25%, not dead, safari >= 6, ios >= 6, chrome >= 52"
-        },
-        "loose": true
+        }
+        //,        "loose": true
       }
     }
   }

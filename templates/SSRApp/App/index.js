@@ -10,32 +10,17 @@ import React              from "react";
 import ReactDom           from 'react-dom';
 import { renderToString } from "react-dom/server";
 import { Helmet }         from "react-helmet";
-import { hot }            from 'react-hot-loader/root'
 
 
 const ctrl = {
     renderTo( node, initialState = {} ) {
         const isDev  = process.env.NODE_ENV !== 'production',
-              App    = require('App/App.js').default,
-              HMRApp = isDev ? hot(App) : App;
+              App    = require('App/App.js').default;
         
         ReactDom.render(
-            <HMRApp/>
+            <App/>
             , node);
         
-        if ( process.env.NODE_ENV !== 'production' && module.hot ) {
-            module.hot.accept("App/index.html");
-            module.hot.accept(
-                'App/App',
-                m => {
-                    let NextApp = hot(require('App/App.js').default);
-                    
-                    ReactDom.render(
-                        <NextApp/>
-                        , node);
-                }
-            )
-        }
     },
     renderSSR( { state, tpl }, cb ) {
         let content = "",

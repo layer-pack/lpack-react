@@ -25,7 +25,7 @@ module.exports = [
 		// The jsx App entry point
 		entry    : {
 			[lpackCfg.vars.rootAlias]: [
-				...(lpackCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
+				//...(lpackCfg.vars.devServer && ['webpack/hot/dev-server'] || []),
 				
 				lpackCfg.vars.entryPoint ?
 				lpackCfg.vars.entryPoint
@@ -143,8 +143,8 @@ module.exports = [
 								],
 								plugins       : [
 									["@babel/plugin-proposal-decorators", { "legacy": true }],
-									['@babel/plugin-proposal-class-properties', {
-										"loose": true
+									['@babel/plugin-transform-class-properties', {
+										//"loose": true
 									}],
 									["@babel/plugin-transform-runtime", {}],
 								]
