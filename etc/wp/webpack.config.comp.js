@@ -13,7 +13,8 @@ const lPack                   = require('layer-pack'),
       HtmlWebpackPlugin       = require('html-webpack-plugin'),
       BundleAnalyzerPlugin    = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
       HardSourceWebpackPlugin = require('hard-source-webpack-plugin'),
-      autoprefixer            = require('autoprefixer');
+      autoprefixer            = require('autoprefixer'),
+      ReactRefreshPlugin      = require('@pmmmwh/react-refresh-webpack-plugin');
 
 
 const lpackCfg   = lPack.getConfig(),
@@ -82,6 +83,9 @@ module.exports = [
                                               })
                     ] || []
                 ),
+                ...(lpackCfg.vars.devServer && [
+                    new ReactRefreshPlugin({})
+                ] || []),
                 ...( fs.existsSync("./LICENCE.HEAD.MD") && [
                         new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
                     ] || []
@@ -124,6 +128,7 @@ module.exports = [
                                     '@babel/preset-react'
                                 ],
                                 plugins       : [
+                                    ...(lpackCfg.vars.devServer && [['react-refresh/babel', {}]] || []),
                                     ["@babel/plugin-proposal-decorators", { "legacy": true }],
                                     ['@babel/plugin-transform-class-properties', {
                                         //"loose": true

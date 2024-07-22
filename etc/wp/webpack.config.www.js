@@ -209,7 +209,7 @@ module.exports = [
 									'@babel/preset-react'
 								],
 								plugins       : [
-									...(lpackCfg.vars.devServer && [['react-refresh/babel', {}]] || {}),
+									...(lpackCfg.vars.devServer && [['react-refresh/babel', {}]] || []),
 									["@babel/plugin-proposal-decorators", { "legacy": true }],
 									['@babel/plugin-transform-class-properties', {
 										//"loose": true

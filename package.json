@@ -1,6 +1,6 @@
 {
   "name": "lpack-react",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "An inheritable App, lib or static App boilerplate with wp5, react, sass, hmr, SSR, express, helmet, etc",
   "license": "MIT",
   "author": "Nathan Braun <n8tz.js@gmail.com>",
@@ -46,7 +46,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "clean-webpack-plugin": "^3.0.0",
     "core-js": "^3.37.1",
-    "css-loader": "^5.2.7",
+        "css-loader": "^5.2.7",
     "cssnano": "^4.1.11",
     "file-loader": "^6.2.0",
     "hard-source-webpack-plugin": "^0.13.1",

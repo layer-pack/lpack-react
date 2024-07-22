@@ -16,7 +16,8 @@ const lPack                = require('layer-pack'),
       BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
       MiniCssExtractPlugin = require('mini-css-extract-plugin'),
       devServerPort        = process.env.DEV_SERVER_PORT || 8080,
-      proxyTo              = process.env.API_PORT || 9701;
+      proxyTo              = process.env.API_PORT || 9701,
+      ReactRefreshPlugin      = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = [
 	{
@@ -72,10 +73,7 @@ module.exports = [
 				".json",
 				".scss",
 				".css",
-			],
-			alias     : lpackCfg.vars.devServer && {
-				'react-dom': '@hot-loader/react-dom'
-			},
+			]
 		},
 		
 		// Global build plugin & option
@@ -92,6 +90,9 @@ module.exports = [
 						                         filename: '[name].css',
 						                         //chunkFilename: '[id].css'
 					                         })
+				] || []),
+				...(lpackCfg.vars.devServer && [
+					new ReactRefreshPlugin({})
 				] || []),
 				...(fs.existsSync("./LICENCE.HEAD.MD") && [
 						new webpack.BannerPlugin(fs.readFileSync("./LICENCE.HEAD.MD").toString())
@@ -142,6 +143,7 @@ module.exports = [
 									'@babel/preset-react'
 								],
 								plugins       : [
+									...(lpackCfg.vars.devServer && [['react-refresh/babel', {}]] || []),
 									["@babel/plugin-proposal-decorators", { "legacy": true }],
 									['@babel/plugin-transform-class-properties', {
 										//"loose": true
