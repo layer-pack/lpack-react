@@ -12,7 +12,6 @@ const lPack                   = require('layer-pack'),
       path                    = require("path"),
       HtmlWebpackPlugin       = require('html-webpack-plugin'),
       BundleAnalyzerPlugin    = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
-      HardSourceWebpackPlugin = require('hard-source-webpack-plugin'),
       autoprefixer            = require('autoprefixer'),
       ReactRefreshPlugin      = require('@pmmmwh/react-refresh-webpack-plugin');
 

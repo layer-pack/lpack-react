@@ -12,9 +12,7 @@ const TerserJSPlugin          = require('terser-webpack-plugin'),
       path                    = require("path"),
       HtmlWebpackPlugin       = require('html-webpack-plugin'),
       BundleAnalyzerPlugin    = require('webpack-bundle-analyzer').BundleAnalyzerPlugin,
-      autoprefixer            = require('autoprefixer'),
-      MiniCssExtractPlugin    = require('mini-css-extract-plugin'),
-      HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+      MiniCssExtractPlugin    = require('mini-css-extract-plugin');
 const ReactRefreshPlugin      = require('@pmmmwh/react-refresh-webpack-plugin');
 const lpackCfg                = lPack.getConfig(),
       isExcluded              = lPack.isFileExcluded(),
@@ -119,13 +117,13 @@ module.exports = [
 		
 		cache: {
 			type                 : "filesystem",
-			allowCollectingMemory: true,
+			//allowCollectingMemory: true,
 			//cacheDirectory       : lPack.getHeadRoot() + "/" + (lpackCfg.vars.targetDir || 'dist') + "/cache",
 		},
 		
 		// required files resolving options
 		resolve: {
-			cache     : false,// requiered for module cache to create indexes
+			//cache     : false,// requiered for module cache to create indexes
 			mainFields: ['browser', 'main', 'module'],
 			extensions: [
 				".",
@@ -225,31 +223,31 @@ module.exports = [
 					use : [
 						"style-loader",
 						{ loader: 'css-loader', options: { importLoaders: 1 } },
-						{
-							loader : 'postcss-loader',
-							options: {
-								postcssOptions: {
-									plugins: [
-										[
-											autoprefixer({
-												             overrideBrowserslist: [
-													             '>1%',
-													             'last 4 versions',
-													             'Firefox ESR',
-													             'not ie < 9', // React doesn't support IE8 anyway
-												             ]
-											             }),
-										]]
-									
-								}
-							}
-						},
+						//{
+						//	loader : 'postcss-loader',
+						//	options: {
+						//		postcssOptions: {
+						//			plugins: [
+						//				[
+						//					autoprefixer({
+						//						             overrideBrowserslist: [
+						//							             '>1%',
+						//							             'last 4 versions',
+						//							             'Firefox ESR',
+						//							             'not ie < 9', // React doesn't support IE8 anyway
+						//						             ]
+						//					             }),
+						//				]]
+						//
+						//		}
+						//	}
+						//},
 						{
 							loader : "sass-loader",
 							options: {
 								sassOptions: {
 									importer  : lPack.plugin().sassImporter(),
-									sourceMaps: true
+									sourceMaps: !!lpackCfg.vars.production
 								},
 							}
 						}

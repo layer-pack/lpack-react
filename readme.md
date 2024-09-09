@@ -50,7 +50,7 @@ lpack-setup
 - targetDir {String}            : relative target build directory
 - production {bool}             : build using production mode
 - extractCss {bool}             : do extract css
-- babelInclude {regexp string}  : optional regexp to force parsing external scripts
+- babelInclude {regexp string}  : optional regexp to force parsing external scripts / mjs packages
 - babelPreset {object}          : optional options for the babelPreset loader
 - TerserJSPlugin {object}       : optional options for the TerserJSPlugin
 - HtmlWebpackPlugin {object}    : optional options for HtmlWebpackPlugin

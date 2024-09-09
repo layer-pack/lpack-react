@@ -17,7 +17,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "layer-pack": "^2.3.9",
-    "lpack-react": "^2.0.8"
+    "layer-pack": "^2.3.13",
+    "lpack-react": "^2.1.1"
   }
 }
