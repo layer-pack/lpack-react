@@ -7,7 +7,7 @@
  */
 import Index              from "App/index.html";
 import React              from "react";
-import ReactDom           from 'react-dom';
+import { createRoot }     from 'react-dom/client';
 import { renderToString } from "react-dom/server";
 import { Helmet }         from "react-helmet";
 
@@ -16,17 +16,15 @@ const ctrl = {
     renderTo( node, initialState = {} ) {
         const isDev  = process.env.NODE_ENV !== 'production',
               App    = require('App/App.js').default;
-        
-        ReactDom.render(
-            <App/>
-            , node);
-        
+
+        createRoot(node).render(<App/>);
+
     },
     renderSSR( { state, tpl }, cb ) {
         let content = "",
             App     = require('App/App.js').default,
             html;
-        
+
         try {
             content = renderToString(
                 <App/>
@@ -45,4 +43,3 @@ const ctrl = {
 }
 
 export default ctrl;
-

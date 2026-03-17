@@ -1,0 +1,29 @@
+{
+  "default": {
+    "rootFolder": "App",
+    "extend": ["lpack-react"]
+  },
+  "www": {
+    "basedOn": "default",
+    "extend": ["lpack-react"],
+    "vars": {
+      "targetDir": "dist/www",
+      "production": false
+    }
+  },
+  "api": {
+    "basedOn": "default",
+    "extend": ["lpack-react"],
+    "vars": {
+      "targetDir": "dist/api",
+      "externals": true
+    }
+  },
+  "static": {
+    "basedOn": "default",
+    "extend": ["lpack-react"],
+    "vars": {
+      "targetDir": "dist/static"
+    }
+  }
+}

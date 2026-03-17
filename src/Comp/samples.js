@@ -5,14 +5,10 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-import React    from "react";
-import ReactDom from "react-dom";
+import React        from "react";
+import {createRoot} from "react-dom/client";
 
 import Comp  from "./index"
 
-//console.log("Dev !")
 
-
-ReactDom.render(
-	<Comp/>
-	, document.getElementById('app'));
+createRoot(document.getElementById('app')).render(<Comp/>);

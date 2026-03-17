@@ -1,28 +1,23 @@
 #!/usr/bin/env node
 /*
- *   The MIT License (MIT)
- *   Copyright (c) 2019. Wise Wild Web
+ * Copyright (c) 2019. MIT License.
+ * @author Nathanael Braun <n8tz.js@gmail.com>
+ */
+
+/**
+ * @file start.js
  *
- *   Permission is hereby granted, free of charge, to any person obtaining a copy
- *   of this software and associated documentation files (the "Software"), to deal
- *   in the Software without restriction, including without limitation the rights
- *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *   copies of the Software, and to permit persons to whom the Software is
- *   furnished to do so, subject to the following conditions:
+ * Build control server for lpack-react. Manages profile lifecycle and
+ * exposes a simple HTTP API for monitoring and control:
  *
- *   The above copyright notice and this permission notice shall be included in all
- *   copies or substantial portions of the Software.
+ *   GET /status          — current build status (running commands, logs)
+ *   GET /restart         — restart the current profile
+ *   GET /switch?to=prod  — stop current profile, switch to another
+ *   GET /kill            — stop all processes and exit
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *   SOFTWARE.
- *
- *   @author : Nathanael Braun
- *   @contact : n8tz.js@gmail.com
+ * Usage:
+ *   lpack-run :dev start          # start dev profile
+ *   lpack-run :prod start -p 9090 # start prod with control server on port 9090
  */
 'use strict';
 
@@ -30,80 +25,62 @@ const program = require('commander'),
       express = require("express"),
       server  = express(),
       http    = require('http').Server(server),
-      exec    = require('child_process').exec,
       argz    = process.argv.slice(2),
       Profile = require('../utils/Profile');
 
 let profileId = process.env.__LPACK_PROFILE__ || "default";
 
-if ( argz[ 0 ] && /^\:.*$/.test(argz[ 0 ]) )
-    profileId = argz.shift().replace(/^\:(.*)$/, '$1');
+// Parse :profileId from CLI args (e.g. "lpack-run :dev start")
+if ( argz[0] && /^\:.*$/.test(argz[0]) )
+	profileId = argz.shift().replace(/^\:(.*)$/, '$1');
 
 program
-    .option('-l, --local', 'Limit Build control web api to localhost')
-    .option('-p, --port [port=9090]', 'Build control')
-    .parse(process.argv);
+	.option('-l, --local', 'Limit build control API to localhost')
+	.option('-p, --port [port]', 'Build control server port (default: 9090)')
+	.parse(process.argv);
 
-let port = program.port === true ? 9090 : program.port,
-    pDir = program.source || process.cwd();
+let port    = program.port === true ? 9090 : program.port,
+    profile = new Profile(profileId);
 
-let profile = new Profile(profileId);
 profile.start();
-profile.onComplete(e => process.exit());
+profile.onComplete(() => process.exit());
 
-process.on('SIGINT', e => profile.stop().then(e => process.exit())); // catch ctrl-c
-process.on('SIGTERM', e => profile.stop().then(e => process.exit())); // catch kill
+process.on('SIGINT', () => profile.stop().then(() => process.exit()));
+process.on('SIGTERM', () => profile.stop().then(() => process.exit()));
 
+// Start the control server if a port is configured
 if ( port ) {
-    server.use(express.json());       // to support JSON-encoded bodies
-    server.use(express.urlencoded()); // to support URL-encoded bodies
-    
-    server.use(
-        "/status",
-        ( req, res ) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.json({ status: profile.getStatus() })
-        }
-    );
-    
-    server.use(
-        "/restart",
-        ( req, res ) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            profile.start();
-            
-            res.json({ success: true })
-        }
-    );
-    
-    server.use(
-        "/switch",
-        ( req, res ) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            profileId = req.query.to || "prod";
-            profile.stop().then(
-                e => {
-                    profile = new Profile(profileId);
-                    profile.start();
-                    res.json({ success: true, profileId })
-                }
-            );
-            
-            
-        }
-    );
-    
-    server.use(
-        "/kill",
-        ( req, res ) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.json({ success: true });
-            
-            profile.stop().then(e => process.exit());
-        }
-    );
-    
-    let server_instance = http.listen(parseInt(port), function () {
-        console.info('Build manager running on ', server_instance.address(), server_instance.address().port)
-    });
+	server.use(express.json());
+	server.use(express.urlencoded({ extended: true }));
+
+	server.get("/status", ( req, res ) => {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.json({ status: profile.getStatus() });
+	});
+
+	server.get("/restart", ( req, res ) => {
+		res.header("Access-Control-Allow-Origin", "*");
+		profile.start();
+		res.json({ success: true });
+	});
+
+	server.get("/switch", ( req, res ) => {
+		res.header("Access-Control-Allow-Origin", "*");
+		profileId = req.query.to || "prod";
+		profile.stop().then(() => {
+			profile = new Profile(profileId);
+			profile.start();
+			res.json({ success: true, profileId });
+		});
+	});
+
+	server.get("/kill", ( req, res ) => {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.json({ success: true });
+		profile.stop().then(() => process.exit());
+	});
+
+	http.listen(parseInt(port), function () {
+		console.info('Build manager running on port', this.address().port);
+	});
 }

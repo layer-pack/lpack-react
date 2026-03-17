@@ -6,6 +6,12 @@
  * https://opensource.org/licenses/MIT.
  */
 
+/**
+ * @file api/index.js
+ *
+ * Default rendering service — serves the SSR-rendered React app on GET /
+ * and static assets from dist/www. Loaded via the glob import in api.js.
+ */
 
 import express from "express";
 import config  from "../config";
@@ -18,13 +24,15 @@ export const service       = ( server ) => {
 		'/',
 		function ( req, res, next ) {
 			App.renderSSR(
-				{
-					url: req.url
-				},
-				( err, html, nstate ) => {
-					res.send(200, html)
+				{ url: req.url },
+				( err, html ) => {
+					if ( err ) {
+						res.status(500).send('<pre>' + err + '</pre>');
+						return;
+					}
+					res.status(200).send(html);
 				}
-			)
+			);
 		}
 	);
 	server.use(express.static(config.projectRoot + '/dist/www'));
